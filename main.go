@@ -66,7 +66,7 @@ func main() {
 	log.Println(energetic1)
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", myHandler)
+	mux.HandleFunc("/energetics", myHandler)
 	fmt.Print("server starts... port 8080")
 	http.ListenAndServe(":8080", mux)
 
@@ -96,15 +96,15 @@ func createEnergetic(db *gorm.DB,
 func myHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		getMessage(w, r)
+		getEnergetics(w, r)
 	case http.MethodPost:
-		postMessage(w, r)
+		postEnergetic(w, r)
 	default:
 		http.Error(w, "Invalid http method", http.StatusMethodNotAllowed)
 	}
 }
 
-func getMessage(w http.ResponseWriter, r *http.Request) {
+func getEnergetics(w http.ResponseWriter, r *http.Request) {
 	responseJSON, err := json.Marshal(energeticsList)
 	if err != nil {
 		http.Error(w, "Failed to marshal JSON", http.StatusInternalServerError)
@@ -113,7 +113,7 @@ func getMessage(w http.ResponseWriter, r *http.Request) {
 	w.Write(responseJSON)
 }
 
-func postMessage(w http.ResponseWriter, r *http.Request) {
+func postEnergetic(w http.ResponseWriter, r *http.Request) {
 
 	var message Message
 	err := json.NewDecoder(r.Body).Decode(&message)
