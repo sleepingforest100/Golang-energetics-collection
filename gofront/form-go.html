@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energetix</title>
+  <link rel="stylesheet" href="./css/custom.css">
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" href="./img/favicon.png">
+</head>
+<body>
+<main class="mx-lg-4 mx-sm-2 mx-2 position-relative overflow-hidden" id="toppage">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light position-sticky sticky-top">
+    <div class="container-fluid">
+      <a onclick="document.getElementById('toppage').scrollIntoView({behavior:'smooth'});" class="navbar-brand">
+        <img src="img/favicon.png" class="rounded-circle" height="50" alt="Logo">
+      </a>
+      <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav">
+          <a href="index-go.html" class="nav-item nav-link active">Home</a>
+          <div class="nav-item dropdown">
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Moderation</a>
+            <div class="dropdown-menu disabled">
+              <a href="#" class="dropdown-item">Create new entry</a>
+              <form action="index-go.html">
+                <input class="dropdown-item form-control w-75 mx-1" placeholder="Search by ID" disabled>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="navbar-nav ms-auto">
+          <a href="#" class="nav-item nav-link">Login</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="alert alert-warning mt-2 mx-auto text-center">
+    <i class="fa fa-info-circle"></i><strong> This webpage is under construction!</strong> We are sorry for any caused inconvenience or utterly ugly appearance!
+  </div>
+  <script>
+    $(document).ready(function (){
+      $('.alert').mouseover(function(){
+        $(this).addClass('alert-disappear');
+        $(this).animate({width:0, opacity:0},500,function (){
+          $(this).css("display","none");
+        });
+      })
+    })
+  </script>
+
+  <form class="mx-md-5 mx-3 mb-5 mt-2 px-4 text-light border border-warning validation" onsubmit="createEntry()">
+    <h4 class="text-white text-center mt-2">Main info</h4>
+    <div class="row g-1 mb-2">
+      <div class="col-6 px-1">
+        <label class="form-label" for="title">Title</label>
+        <input type="text" class="w-100 rounded border-1 h-50 p-3" id="title" placeholder="Title" required>
+        <small class="invalid-feed d-none" id="if1">This field is required. Numbers are not accepted.</small>
+      </div>
+      <div class="col-6 px-1">
+        <label class="form-label" for="taste">Taste</label>
+        <input type="text" class="w-100 rounded border-1 h-50 p-3" id="taste" placeholder="Subtitle - taste description" required>
+        <small class="invalid-feed d-none" id="if2">This field is required. Numbers are not accepted.</small>
+      </div>
+    </div>
+    <div class="row g-1 mb-2">
+      <div class="col-6 px-1">
+        <label class="form-label" for="manufacturer">Manufacturing company</label>
+        <input type="text" class="w-100 rounded border-1 h-50 p-3" id="manufacturer" placeholder="Manufacturer" required>
+        <small class="invalid-feed d-none" id="if3">This field is required. Numbers are not accepted.</small>
+      </div>
+      <div class="col-6 px-1">
+        <label class="form-label" for="country">Origin country</label>
+        <input type="text" class="w-100 rounded border-1 h-50 p-3" id="country" placeholder="Country" required>
+        <small class="invalid-feed d-none" id="if4">This field is required. Numbers are not accepted.</small>
+      </div>
+    </div>
+    <h4 class="text-white text-center">Nutrition facts</h4>
+    <div class="row g-1 mb-2">
+      <div class="col-6 px-1">
+        <label class="form-label" for="caf">Caffeine content</label>
+        <input type="text" class="w-100 rounded border-1 h-50 p-3" id="caf" placeholder="Caffeine" required>
+        <small class="invalid-feed d-none" id="if5">This field is required. Numbers are not accepted.</small>
+      </div>
+      <div class="col-6 px-1">
+        <label class="form-label" for="tau">Taurine content</label>
+        <input type="text" class="w-100 rounded border-1 h-50 p-3" id="tau" placeholder="Taurine" required>
+        <small class="invalid-feed d-none" id="if6">This field is required. Numbers are not accepted.</small>
+      </div>
+    </div>
+    <hr>
+    <p class="form-text text-white">Web description</p>
+    <textarea class="form-control mx-auto mb-2" rows="2" id="desc"></textarea>
+    <div class="my-4 justify-content-around d-flex">
+      <a href="index-go.html" class="btn btn-secondary rounded-pill">Discard</a>
+      <button type="submit" class="btn btn-primary rounded-pill" id="btnconfirm">Confirm</button>
+    </div>
+    <div class="row g-1 mb-2">
+      <div class="col-12 px-1">
+        <label class="form-label" for="url">Image URL</label>
+        <input type="text" class="w-100 rounded border-1 h-50 p-3" id="url" placeholder="URL" required>
+        <small class="invalid-feed d-none" id="if7">This field is required. Numbers are not accepted.</small>
+      </div>
+    </div>
+  </form>
+
+
+  <footer>
+    <hr>
+    <p>33 Sunside Drive, Guatemala, 33913. &copy; Stargazers house</p>
+  </footer>
+
+  <script>
+    $(document).ready(function () {
+      function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+      }
+      var id = getQueryParam('id');
+      if (id) {
+        var obj;
+        fetch(`http://localhost:8080/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                  obj = data;
+                })
+                .catch(error => console.error('Fetching error:', error));
+        $('#title').val(obj.Title);
+        $('#taste').val(obj.Taste);
+        $('#manufacturer').val(obj.ManufacturerName);
+        $('#country').val(obj.ManufacturerCountry);
+        $('#caf').val(obj.Composition.Caffeine);
+        $('#tau').val(obj.Composition.Taurine);
+        $('#desc').val(obj.Description);
+        $('#url').val(obj.PictureURL);
+      }
+    });
+  </script>
+  <script>
+    function createEntry() {
+      function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+      }
+      var id = getQueryParam('id');
+      var url = id ? 'update/' + id : 'create';
+
+      const name = $('#title').val();
+      const taste = $('#taste').val();
+      const manufacturer = $('#manufacturer').val();
+      const country = $('#country').val();
+      const caffeine = $('#caf').val();
+      const taurine = $('#tau').val();
+      const description = $('#desc').val();
+      const picurl = $('#url').val();
+      if (name && taste && manufacturer && country && caffeine && taurine && description && picurl) {
+        fetch(url, {
+          method: id ? 'PUT' : 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            Name:name,
+            Taste:taste,
+            Description:description,
+            ManufacturerName:manufacturer,
+            ManufacturerCountry:country,
+            PictureURL:picurl,
+            Composition:{
+              Caffeine:caffeine,
+              Taurine:taurine
+            }
+          }),
+        })
+                .then(response => {
+                  if (response.ok) {
+                    window.location.href = 'index-go.html';
+                  } else {
+                    alert('error');
+                    window.location.href = 'index-go.html';
+                    console.error('Failed to create new entry:', response.statusText);
+                  }
+                })
+                .catch(error => console.error('Error creating new entry:', error));
+      }
+    }
+  </script>
+</main>
+<script src="./js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
