@@ -7,6 +7,7 @@ The data is stored in postgres. The server starts on the port 8080.
 AUTHORS: Polina Batova SE-2212, Igor Letunovskii SE-2212, Madina Aitzhanova SE-2212
 
 SCREENSHOT
+![screenshot](https://github.com/PollyBreak/Golang-energetics-collection/assets/88556120/4a3bd5a1-e3c8-472e-9a25-8408578aa861)
 
 
 LAUNCH INSTRUCTIONS:
@@ -32,10 +33,11 @@ LAUNCH INSTRUCTIONS:
         go get -u github.com/lib/pq
         go get -u github.com/gorilla/handlers
         go get -u github.com/gorilla/mux
-  5.  Launch the application, write "go run main.go" in the terminal. Agree with your FireWall if it's neccessary.
-  6.  
-  7. 
-   
+  5. Launch the application, write "go run main.go" in the terminal. Agree with your FireWall if it's neccessary.
+  6. Launch index.html from the 'gofront' folder in the repository.
+  7. Scroll page a bit lower and click on "Moderation" to the right side of the page. There you can see options to create and to find by id.
+  8. For updating and deleting you can click on the energetics cards.
+     
        
 TOOLS STACK: 
   BACKEND: Golang, Postgres, GORM (ORM library), golang-migrate, 
@@ -48,7 +50,3 @@ LINKS TO SOURCES
   Hugo Johnsson. REST-API with Golang and Mux. URL: https://hugo-johnsson.medium.com/rest-api-with-golang-and-mux-e934f581b8b5
 
 
-c. ФИО участников
-d. скриншот первой страницы вашего сайта
-e. пошаговая инструкция для запуска приложения (сервер, веб-страница и
-прочее)
