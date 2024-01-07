@@ -46,7 +46,7 @@ function createInfoModal(item){
 
     var mbody = $('<div class="modal-body">');
     var infopara = $('<p>'+item.Description+"<br>Manufacturer: "+item.ManufacturerName+
-        ', '+item.ManufacturerCountry+"<br>Nutrition facts:<br>Caffeine: " +
+        ', '+item.ManufactureCountry+"<br>Nutrition facts:<br>Caffeine: " +
         item.Composition.Caffeine+"<br>Taurine: "+item.Composition.Taurine+'</p>');
     mbody.append(infopara);
 
