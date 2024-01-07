@@ -4,7 +4,7 @@ all!. So this project can help with this problem. The application allows users t
 update information about them by id, delete energy drinks by id, find a drink by id or look through them all. The target users are people who love drinking and collecting energy drinks.
 The data is stored in postgres. The server starts on the port 8080.
 
-AUTHORS: Polina Batova SE-2212, Igor Letunovslii SE-2212, Madina Aitzhanova SE-2212
+AUTHORS: Polina Batova SE-2212, Igor Letunovskii SE-2212, Madina Aitzhanova SE-2212
 
 SCREENSHOT
 
