@@ -1,7 +1,7 @@
               ENERGETIX COLLECTION - web service for collecting energy drinks + web page 
 DESCRIPTION: Nowadays, there is large amount of energy drinks, and a lot of them differs greatly. There are different tastes, various cans, distinct styles, and it's impossible to remember them 
 all!. So this project can help with this problem. The application allows users to collect information about different energy drinks. It gives opportunities to add energy drinks in database, 
-update information about them by id, delete energy drinks by id, find a drink by id or look through them all. The target users are people who loves drinking and collecting energy drinks.
+update information about them by id, delete energy drinks by id, find a drink by id or look through them all. The target users are people who love drinking and collecting energy drinks.
 The data is stored in postgres. The server starts on the port 8080.
 
 AUTHORS: Polina Batova SE-2212, Igor Letunovslii SE-2212, Madina Aitzhanova SE-2212
