@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -65,10 +66,8 @@ func main() {
 	db.Preload("Composition").First(&energetic1, 1)
 	log.Println(energetic1)
 
-	mux := http.NewServeMux()
-	mux.HandleFunc("/energetics", myHandler)
 	fmt.Print("server starts... port 8080")
-	http.ListenAndServe(":8080", mux)
+	handleRequests(db)
 
 }
 
@@ -93,15 +92,13 @@ func createEnergetic(db *gorm.DB,
 	return nil
 }
 
-func myHandler(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case http.MethodGet:
-		getEnergetics(w, r)
-	case http.MethodPost:
-		postEnergetic(w, r)
-	default:
-		http.Error(w, "Invalid http method", http.StatusMethodNotAllowed)
-	}
+func handleRequests(db *gorm.DB) {
+
+	myRouter := mux.NewRouter().StrictSlash(true)
+	myRouter.HandleFunc("/energetics", getEnergetics).Methods("GET")
+	// myRouter.HandleFunc("/energetics", postEnergetics).Methods("POST")
+	myRouter.HandleFunc("/energetics/{id}", getEnergeticsById).Methods("GET")
+	log.Fatal(http.ListenAndServe(":8080", myRouter))
 }
 
 func getEnergetics(w http.ResponseWriter, r *http.Request) {
@@ -111,6 +108,28 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Write(responseJSON)
+}
+
+func getEnergeticsById(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	// log.Print(params)
+	var energetic1 Energetic
+	dsn := "host=localhost user=postgres password=222316pb dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	db.AutoMigrate(&Energetic{}, &Composition{})
+	err2 := db.Preload("Composition").First(&energetic1, params["id"]).Error
+	sqlDB, err := db.DB()
+	sqlDB.Close()
+	if err2 != nil {
+		answer := Message{Status: "404", Message: "Energy drink with such ID does not exist"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+	json.NewEncoder(w).Encode(energetic1)
+	return
 }
 
 func postEnergetic(w http.ResponseWriter, r *http.Request) {
