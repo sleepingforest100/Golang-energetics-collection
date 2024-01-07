@@ -1,12 +1,12 @@
-CREATE TABLE composition
+CREATE TABLE compositions
 (
 	composition_id serial NOT NULL PRIMARY KEY,
-    energetics_id integer NOT NULL,
+    energetics_id integer,
     caffeine integer,
     taurine integer,
-	FOREIGN KEY (energetics_id) REFERENCES energetics (id)
+	FOREIGN KEY (energetics_id) REFERENCES energetics (energetics_id)
 );
 
 ALTER TABLE IF EXISTS energetics
     ADD COLUMN composition_id bigint
-	REFERENCES composition(composition_id);
+	REFERENCES compositions(composition_id);
