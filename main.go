@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
@@ -66,8 +67,20 @@ func main() {
 	db.Preload("Composition").First(&energetic1, 1)
 	log.Println(energetic1)
 
-	fmt.Print("server starts... port 8080")
-	handleRequests(db)
+	router := mux.NewRouter()
+	router.HandleFunc("/energetix", getEnergetics).Methods("GET")
+	// myRouter.HandleFunc("/energetics", postEnergetics).Methods("POST")
+	router.HandleFunc("/energetix/{id}", getEnergeticsById).Methods("GET")
+
+	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
+	origins := handlers.AllowedOrigins([]string{"http://localhost:63342"})
+	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"})
+	credentials := handlers.AllowCredentials()
+	http.Handle("/", handlers.CORS(headers, origins, methods, credentials)(router))
+	erro := http.ListenAndServe(":8080", nil)
+	if erro != nil {
+		panic(err)
+	}
 
 }
 
