@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -71,6 +72,7 @@ func main() {
 	router.HandleFunc("/energetix", getEnergetics).Methods("GET")
 	// myRouter.HandleFunc("/energetics", postEnergetics).Methods("POST")
 	router.HandleFunc("/energetix/{id}", getEnergeticsById).Methods("GET")
+	router.HandleFunc("/energetix/{id}", updateEnergeticsById).Methods("POST")
 
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
 	origins := handlers.AllowedOrigins([]string{"http://localhost:63342"})
@@ -105,15 +107,6 @@ func createEnergetic(db *gorm.DB,
 	return nil
 }
 
-func handleRequests(db *gorm.DB) {
-
-	myRouter := mux.NewRouter().StrictSlash(true)
-	myRouter.HandleFunc("/energetics", getEnergetics).Methods("GET")
-	// myRouter.HandleFunc("/energetics", postEnergetics).Methods("POST")
-	myRouter.HandleFunc("/energetics/{id}", getEnergeticsById).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8080", myRouter))
-}
-
 func getEnergetics(w http.ResponseWriter, r *http.Request) {
 	responseJSON, err := json.Marshal(energeticsList)
 	if err != nil {
@@ -143,6 +136,50 @@ func getEnergeticsById(w http.ResponseWriter, r *http.Request) {
 	}
 	json.NewEncoder(w).Encode(energetic1)
 	return
+}
+
+func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	targetID, err := strconv.ParseUint(params["id"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid ID", http.StatusBadRequest)
+		return
+	}
+
+	// Распаковываем JSON из тела запроса в объект
+	var updatedEnergetic Energetic
+	if err := json.NewDecoder(r.Body).Decode(&updatedEnergetic); err != nil {
+		http.Error(w, "Invalid JSON", http.StatusBadRequest)
+		return
+	}
+
+	// Открываем подключение к базе данных
+	dsn := "host=localhost user=postgres password=222316pb dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Проверяем, существует ли энергетик с указанным ID
+	var existingEnergetic Energetic
+	if err := db.First(&existingEnergetic, targetID).Error; err != nil {
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	// Обновляем данные
+	db.Model(&existingEnergetic).Updates(updatedEnergetic)
+	w.WriteHeader(http.StatusOK)
+
+}
+
+func isEnergeticInList(energeticsList []Energetic, targetID uint) bool {
+	for _, energetics := range energeticsList {
+		if energetics.EnergeticsID == targetID {
+			return true
+		}
+	}
+	return false
 }
 
 func postEnergetic(w http.ResponseWriter, r *http.Request) {
