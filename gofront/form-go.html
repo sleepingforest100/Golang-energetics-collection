@@ -124,20 +124,20 @@
       var id = getQueryParam('id');
       if (id) {
         var obj;
-        fetch(`http://localhost:8080/${id}`)
+        fetch(`http://localhost:8080/energetix/${id}`)
                 .then(response => response.json())
                 .then(data => {
                   obj = data;
+                  $('#title').val(obj.Name);
+                  $('#taste').val(obj.Taste);
+                  $('#manufacturer').val(obj.ManufacturerName);
+                  $('#country').val(obj.ManufactureCountry);
+                  $('#caf').val(obj.Composition.Caffeine);
+                  $('#tau').val(obj.Composition.Taurine);
+                  $('#desc').val(obj.Description);
+                  $('#url').val(obj.PictureURL);
                 })
                 .catch(error => console.error('Fetching error:', error));
-        $('#title').val(obj.Title);
-        $('#taste').val(obj.Taste);
-        $('#manufacturer').val(obj.ManufacturerName);
-        $('#country').val(obj.ManufacturerCountry);
-        $('#caf').val(obj.Composition.Caffeine);
-        $('#tau').val(obj.Composition.Taurine);
-        $('#desc').val(obj.Description);
-        $('#url').val(obj.PictureURL);
       }
     });
   </script>
@@ -148,28 +148,28 @@
         return urlParams.get(name);
       }
       var id = getQueryParam('id');
-      var url = id ? 'update/' + id : 'create';
+      var url = id ? `http://localhost:8080/energetix/${id}` : 'http://localhost:8080/energetix';
 
       const name = $('#title').val();
       const taste = $('#taste').val();
       const manufacturer = $('#manufacturer').val();
       const country = $('#country').val();
-      const caffeine = $('#caf').val();
-      const taurine = $('#tau').val();
+      const caffeine = parseInt($('#caf').val());
+      const taurine = parseInt($('#tau').val());
       const description = $('#desc').val();
       const picurl = $('#url').val();
       if (name && taste && manufacturer && country && caffeine && taurine && description && picurl) {
         fetch(url, {
-          method: id ? 'PUT' : 'POST',
+          method:id ? 'PUT' : 'POST',
           headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=UTF-8',
           },
           body: JSON.stringify({
             Name:name,
             Taste:taste,
             Description:description,
             ManufacturerName:manufacturer,
-            ManufacturerCountry:country,
+            ManufactureCountry:country,
             PictureURL:picurl,
             Composition:{
               Caffeine:caffeine,
@@ -181,7 +181,6 @@
                   if (response.ok) {
                     window.location.href = 'index-go.html';
                   } else {
-                    alert('error');
                     window.location.href = 'index-go.html';
                     console.error('Failed to create new entry:', response.statusText);
                   }

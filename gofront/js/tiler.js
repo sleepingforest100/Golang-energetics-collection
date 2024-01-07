@@ -18,12 +18,12 @@ $(document).ready(function() {
     }
     function deleteEntry(id) {
         if (confirm('Are you sure you want to delete this entry?')) {
-            fetch(`http://localhost:8080/${id}`, {
+            fetch(`http://localhost:8080/energetix/${id}`, {
                 method: 'DELETE',
             })
                 .then(response => {
                     if (response.ok) {
-                        window.reload();
+                        location.reload();
                     } else {
                         alert('error');
                         console.error('Failed to delete entry:', response.statusText);
@@ -75,7 +75,7 @@ $(document).ready(function() {
 
         return carousel;
     }
-    $('.deletebtn').on('click',function(){
+    $('#tiles').on('click','.deletebtn',function(){
         var id = $(this).data('target');
         deleteEntry(id);
     })
@@ -90,7 +90,7 @@ $(document).ready(function() {
 
         var mbody = $('<div class="modal-body">');
         var infopara = $('<p>'+item.Description+"<br>Manufacturer: "+item.ManufacturerName+
-            ', '+item.ManufacturerCountry+"<br>Nutrition facts:<br>Caffeine: " +
+            ', '+item.ManufactureCountry+"<br>Nutrition facts:<br>Caffeine: " +
             item.Composition.Caffeine+"<br>Taurine: "+item.Composition.Taurine+'</p>');
         mbody.append(infopara);
 
