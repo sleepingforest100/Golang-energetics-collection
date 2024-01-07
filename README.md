@@ -36,10 +36,10 @@ LAUNCH INSTRUCTIONS:
   5. Change all the passwords and users for connections in the code into yours. Use ctrl+f, you should change them in 4 places. It's very important!
   6. Launch the application, write "go run main.go" in the terminal. Agree with your FireWall if it's neccessary.
   7. In our current version, html page works only if launched on localhost via IntelliJ IDEA, we need to create a new HTML Bootstrap project and copy all 'gofront' folder contents into the new project. jQuery is required, check if External Libraries has it, if not - hover over a jquery link that can be found in the top of a index-go.html file. If a message with a text allowing to Download Library pops up - click on it and download. If jQuery already installed you need to include it manually via File > Project Structure > Global Libraries > Right click on jQuery > Add to Modules > Apply. Then just run index-go.html using IDEA's regular application launch button (green arrow in the top right).
-  8. Launch index.html from the 'gofront' folder in the repository.
-  9. Scroll page a bit lower and click on "Moderation" to the right side of the page. There you can see options to create and to find by id.
-  10. For updating and deleting you can click on the energetics cards.
-     ![screenshot2](https://github.com/PollyBreak/Golang-energetics-collection/assets/88556120/3a4ce95d-5dd3-453d-a680-e9a18fc8cd2e)
+  8. Scroll page a bit lower and click on "Moderation" to the right side of the page. There you can see options to create and to find by id.
+  9. For updating and deleting you can click on the energetics cards.
+     ![screenshot2](https://github.com/PollyBreak/Golang-energetics-collection/assets/88556120/05fff3c9-0479-4edd-958f-6b7ea3c8605a)
+
 
        
 TOOLS STACK: 
