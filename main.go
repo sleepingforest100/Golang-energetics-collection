@@ -145,15 +145,12 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid ID", http.StatusBadRequest)
 		return
 	}
-
-	// Распаковываем JSON из тела запроса в объект
 	var updatedEnergetic Energetic
 	if err := json.NewDecoder(r.Body).Decode(&updatedEnergetic); err != nil {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
 
-	// Открываем подключение к базе данных
 	dsn := "host=localhost user=postgres password=222316pb dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
