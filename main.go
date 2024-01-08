@@ -41,16 +41,22 @@ type CompositionUniqueConstraint struct {
 }
 
 var energeticsList []Energetic
+var db *gorm.DB
 
-func main() {
-
-	dsn := "host=localhost user=postgres password=admin dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+func initDB() {
+	dsn := "host=localhost user=postgres password=222316pb dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	var err error
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	db.AutoMigrate(&Energetic{}, &Composition{})
+}
+
+func main() {
+
+	initDB()
 	db.Preload("Composition").Find(&energeticsList)
 
 	// createEnergetic(db, "Monster2", "Orange", "Wow", "Ho", "Hungry", "dfsfsfs", 32, 400)
@@ -70,13 +76,13 @@ func main() {
 	router.HandleFunc("/energetix/{id}", deleteEnergeticById).Methods("DELETE")
 
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
-	origins := handlers.AllowedOrigins([]string{"http://localhost:63342"})
+	origins := handlers.AllowedOrigins([]string{"http://localhost:63342", "http://127.0.0.1:5500"})
 	methods := handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE"})
 	credentials := handlers.AllowCredentials()
 	http.Handle("/", handlers.CORS(headers, origins, methods, credentials)(router))
 	erro := http.ListenAndServe(":8080", nil)
 	if erro != nil {
-		panic(err)
+		panic(erro)
 	}
 
 }
@@ -103,6 +109,10 @@ func createEnergetic(db *gorm.DB,
 }
 
 func getEnergetics(w http.ResponseWriter, r *http.Request) {
+
+	db.AutoMigrate(&Energetic{}, &Composition{})
+	db.Preload("Composition").Find(&energeticsList)
+
 	responseJSON, err := json.Marshal(energeticsList)
 	if err != nil {
 		http.Error(w, "Failed to marshal JSON", http.StatusInternalServerError)
@@ -115,15 +125,10 @@ func getEnergeticsById(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	// log.Print(params)
 	var energetic1 Energetic
-	dsn := "host=localhost user=postgres password=admin dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatal(err)
-	}
+
 	db.AutoMigrate(&Energetic{}, &Composition{})
 	err2 := db.Preload("Composition").First(&energetic1, params["id"]).Error
-	sqlDB, err := db.DB()
-	sqlDB.Close()
+
 	if err2 != nil {
 		answer := Message{Status: "404", Message: "Energy drink with such ID does not exist"}
 		json.NewEncoder(w).Encode(answer)
@@ -148,11 +153,8 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	dsn := "host=localhost user=postgres password=admin dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatal(err)
-	}
+	db.AutoMigrate(&Energetic{}, &Composition{})
+
 	var existingEnergetic Energetic
 	if err := db.First(&existingEnergetic, targetID).Error; err != nil {
 		answer := Message{Status: "404", Message: "Energy drink with such ID does not exist"}
@@ -160,10 +162,14 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	db.Model(&existingEnergetic).Updates(updatedEnergetic)
+	// db.Session(&gorm.Session{FullSaveAssociations: true}).Model(&existingEnergetic).Updates(&updatedEnergetic)
+	// existingEnergetic.Composition.Caffeine = updatedEnergetic.Composition.Caffeine
+	// existingEnergetic.Composition.Taurine = updatedEnergetic.Composition.Taurine
+	existingEnergetic.Composition = updatedEnergetic.Composition
+
+	db.Session(&gorm.Session{FullSaveAssociations: true}).Model(&existingEnergetic).Updates(&updatedEnergetic)
+
 	db.Preload("Composition").Find(&energeticsList)
-	sqlDB, err := db.DB()
-	sqlDB.Close()
 
 	w.WriteHeader(http.StatusOK)
 	answer := Message{Status: "200", Message: "Energy drink was updated"}
@@ -179,19 +185,14 @@ func postEnergetic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	dsn := "host=localhost user=postgres password=admin dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatal(err)
-	}
+	db.AutoMigrate(&Energetic{}, &Composition{})
+
 	if err := db.Create(&newEnergetic).Error; err != nil {
 		answer := Message{Status: "404", Message: "Invalid JSON message"}
 		json.NewEncoder(w).Encode(answer)
 		return
 	}
 	db.Preload("Composition").Find(&energeticsList)
-	sqlDB, err := db.DB()
-	sqlDB.Close()
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(newEnergetic)
@@ -205,12 +206,7 @@ func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(answer)
 		return
 	}
-
-	dsn := "host=localhost user=postgres password=admin dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatal(err)
-	}
+	db.AutoMigrate(&Energetic{}, &Composition{})
 
 	if err := db.Delete(&Energetic{}, targetID).Error; err != nil {
 		answer := Message{Status: "404", Message: "Invalid JSON message"}
@@ -218,8 +214,6 @@ func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	db.Preload("Composition").Find(&energeticsList)
-	sqlDB, err := db.DB()
-	sqlDB.Close()
 
 	answer := Message{Status: "410", Message: "Energy drink was deleted successfully"}
 	json.NewEncoder(w).Encode(answer)

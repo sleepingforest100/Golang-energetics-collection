@@ -108,6 +108,7 @@
       </div>
     </div>
   </form>
+  <p class="d-none" id="compid"></p>
 
 
   <footer>
@@ -136,6 +137,7 @@
                   $('#tau').val(obj.Composition.Taurine);
                   $('#desc').val(obj.Description);
                   $('#url').val(obj.PictureURL);
+                  $('#compid').text(obj.Composition.CompositionID)
                 })
                 .catch(error => console.error('Fetching error:', error));
       }
@@ -158,13 +160,26 @@
       const taurine = parseInt($('#tau').val());
       const description = $('#desc').val();
       const picurl = $('#url').val();
+      const compid = parseInt($('#compid').text());
       if (name && taste && manufacturer && country && caffeine && taurine && description && picurl) {
         fetch(url, {
           method:id ? 'PUT' : 'POST',
           headers: {
             'Content-Type': 'application/json; charset=UTF-8',
           },
-          body: JSON.stringify({
+          body: id ? JSON.stringify({
+            Name:name,
+            Taste:taste,
+            Description:description,
+            ManufacturerName:manufacturer,
+            ManufactureCountry:country,
+            PictureURL:picurl,
+            Composition:{
+              CompositionID:compid,
+              Caffeine:caffeine,
+              Taurine:taurine
+            }
+          }) : JSON.stringify({
             Name:name,
             Taste:taste,
             Description:description,
