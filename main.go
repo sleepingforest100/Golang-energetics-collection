@@ -109,19 +109,24 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 	sort := r.FormValue("sort")
 	order := r.FormValue("order")
 
-	if len(sort) > 0 && len(order) > 0 {
-		err := db.
-			Model(&Energetic{}).
-			Joins("Composition").
-			Order(sort + " " + order).
-			Find(&energeticsList).
-			Error
-
-		if err != nil {
-			http.Error(w, "Failed to marshal JSON with sorting", http.StatusInternalServerError)
-			return
-		}
+	// if len(sort) > 0 && len(order) > 0 {
+	if len(sort) < 1 && len(order) < 1 {
+		sort = "energetics_id"
+		order = "desc"
 	}
+
+	err := db.
+		Model(&Energetic{}).
+		Joins("Composition").
+		Order(sort + " " + order).
+		Find(&energeticsList).
+		Error
+
+	if err != nil {
+		http.Error(w, "Failed to marshal JSON with sorting", http.StatusInternalServerError)
+		return
+	}
+	// }
 
 	// db.Table("compositions").
 	// 	Select("compositions.*, energetics.*").
