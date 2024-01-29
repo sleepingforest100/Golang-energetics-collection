@@ -19,8 +19,8 @@
 </div>
 <div class="wrapper">
   <header class="parallax">
-    <img src="./img/back.jpg" class="forelayer">
-    <img src="./img/top.png" class="toplayer">
+    <img src="/static/img/back.jpg" class="forelayer">
+    <img src="/static/img/top.png" class="toplayer">
     <h1 class="title">ENERGETiX</h1>
     <h6 class="subtitle">energy thirsty hub</h6>
   </header>
@@ -28,7 +28,7 @@
   <nav class="navbar navbar-expand-lg navbar-light bg-light position-sticky sticky-top">
     <div class="container-fluid">
       <a onclick="document.getElementById('toppage').scrollIntoView({behavior:'smooth'});" class="navbar-brand">
-        <img src="img/favicon.png" class="rounded-circle" height="50" alt="Logo">
+        <img src="/static/img/favicon.png" class="rounded-circle" height="50" alt="Logo">
       </a>
       <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
@@ -52,6 +52,92 @@
       </div>
     </div>
   </nav>
+
+  <div class="bg-white">
+  <div class="container mt-4">
+  <div class="row d-flex justify-content-between">
+    <div class="col-md-4">
+      <!-- Select Box for Sorting Options -->
+      <div class="form-group">
+        <label for="sortingSelect">Sort By:</label>
+        <select class="form-control" id="sortingSelect">
+          <option value="default">Default</option>
+          <option value="name/asc">By name A-Z</option>
+          <option value="name/desc">By name Z-A</option>
+          <option value="caffeine/asc">By caffeine content - lowest to highest</option>
+          <option value="caffeine/desc">By caffeine content - highest to lowest</option>
+          <option value="taurine/asc">By taurine content - lowest to highest</option>
+          <option value="taurine/desc">By taurine content - highest to lowest</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-4 align-self-end">
+      <!-- Filtering Button with Arrow-down Icon -->
+      <div class="input-group">
+        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#filterAccordion" aria-expanded="false" aria-controls="filterAccordion">
+          Filter <i class="fa fa-caret-down"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accordion with Checkboxes and Find Button -->
+  <div class="row mt-3">
+      <div class="collapse" id="filterAccordion">
+        <div class="card card-body border-0">
+          <div class="row">
+          <div class="form-check col-lg-2 col-6">
+            <input class="form-check-input" type="checkbox" value="caffeine_gte=30" id="checkbox1">
+            <label class="form-check-label" for="checkbox1">
+              High caffeine content (>30mg)
+            </label>
+          </div>
+          <div class="form-check col-lg-2 col-6">
+            <input class="form-check-input" type="checkbox" value="caffeine_lte=29" id="checkbox2">
+            <label class="form-check-label" for="checkbox2">
+              Low caffeine content (<30mg)
+            </label>
+          </div>
+          <div class="form-check col-lg-2 col-6">
+            <input class="form-check-input" type="checkbox" value="taurine_gte=400" id="checkbox3">
+            <label class="form-check-label" for="checkbox3">
+              Taurine rich
+            </label>
+          </div>
+            <div class="form-check col-lg-2 col-6">
+              <label class="form-check-label" for="inputbox1">
+                Name
+              </label>
+              <input class="form-control" type="text" id="inputbox1" data-id="name=">
+            </div>
+            <div class="form-check col-lg-2 col-6">
+              <label class="form-check-label" for="inputbox2">
+                Taste
+              </label>
+              <input class="form-control" type="text" id="inputbox2" data-id="taste=">
+            </div>
+            <div class="form-check col-lg-2 col-6">
+              <label class="form-check-label" for="inputbox3">
+                Manufacturer
+              </label>
+              <input class="form-control" type="text" id="inputbox3" data-id="manufacturer=">
+            </div>
+            <div class="form-check col-lg-2 col-6">
+              <label class="form-check-label" for="inputbox4">
+                Country
+              </label>
+              <input class="form-control" type="text" id="inputbox4" data-id="country=">
+            </div>
+          </div>
+          <!-- Add more checkboxes as needed -->
+
+          <button type="button" class="btn btn-primary mt-3 mx-auto" id="gofilter">Find</button>
+        </div>
+      </div>
+  </div>
+</div>
+  </div>
+
 
   <script>
     function search(){
@@ -92,347 +178,14 @@
   </script>
 
   <div class="container mb-4" id="tiles">
-    <div class="row g-1 mx-auto my-2 justify-content-around d-none">
-      <div id="myCarousel1" class="carousel col-lg-4 col-sm-6 col-10">
-        <ol class="carousel-indicators visually-hidden">
-          <li data-bs-target="#myCarousel1" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel1" data-bs-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="img/cover_monster_punch_pipeline.png" class="d-block img-fluid w-100" alt="Slide 1">
-            <a class="carousel-control-prev w-100 h-100" href="#myCarousel1" data-bs-slide="prev" data-bs-slide-to="1">
-            </a>
-          </div>
-          <div class="carousel-item">
-            <div class="card text-center d-flex justify-content-between p-2">
-              <div class="card-header">
-                <h5 class="card-title" style="color:hotpink">Monster&reg Pipeline Punch</h5>
-              </div>
-              <div class="card-text">A flavour like sakura, glowy barby-like pink metal casing and monstrous notorious but beloved Monster&reg logo on top!
-                <br>
-                <em class="text-warning">COF:32/TAU:400/VOL:0,5</em></div>
-              <div class="card-footer">
-                <a href="form.html" class="btn btn-secondary rounded-pill">Buy</a>
-              </div>
-              <a class="carousel-control-prev w-100 h-75 pb-25" href="#myCarousel1" data-bs-slide="prev" data-bs-slide-to="0">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="myCarousel2" class="carousel col-lg-4 col-sm-6 col-10">
-        <ol class="carousel-indicators visually-hidden">
-          <li data-bs-target="#myCarousel2" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel2" data-bs-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="img/cover_kaif_mojito.png" class="d-block img-fluid w-100" alt="Slide 1">
-            <a class="carousel-control-prev w-100 h-100" href="#myCarousel2" data-bs-slide="prev" data-bs-slide-to="1">
-            </a>
-          </div>
-          <div class="carousel-item">
-            <div class="card text-center d-flex justify-content-between p-2">
-              <div class="card-header">
-                <h5 class="card-title" style="color:darkseagreen">KAIF&reg Mojito Virgin</h5>
-              </div>
-              <div class="card-text">Astonishing and refreshing! Top german bewerage with real mint on the tip of your tongue!
-                <br>
-                <em class="text-warning">COF:30/TAU:380/VOL:0,5</em></div>
-              <div class="card-footer">
-                <a href="form.html" class="btn btn-secondary rounded-pill">Buy</a>
-              </div>
-              <a class="carousel-control-prev w-100 h-75 pb-25" href="#myCarousel2" data-bs-slide="prev" data-bs-slide-to="0">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="myCarousel3" class="carousel col-lg-4 col-sm-6 col-10">
-        <ol class="carousel-indicators visually-hidden">
-          <li data-bs-target="#myCarousel3" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel3" data-bs-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="img/cover_lit_blueberry.png" class="d-block img-fluid w-100" alt="Slide 1">
-            <a class="carousel-control-prev w-100 h-100" href="#myCarousel3" data-bs-slide="prev" data-bs-slide-to="1">
-            </a>
-          </div>
-          <div class="carousel-item">
-            <div class="card text-center d-flex justify-content-between p-2">
-              <div class="card-header">
-                <h5 class="card-title" style="color:darkslateblue">Lit Energy Blueberry</h5>
-              </div>
-              <div class="card-text">Peachy soft and wet blueberries from taiga itself were magically transformed into this delicious drink!
-                <br>
-                <em class="text-warning">COF:30/TAU:240/VOL:0,5</em></div>
-              <div class="card-footer">
-                <a href="form.html" class="btn btn-secondary rounded-pill">Buy</a>
-              </div>
-              <a class="carousel-control-prev w-100 h-75 pb-25" href="#myCarousel3" data-bs-slide="prev" data-bs-slide-to="0">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="myCarousel4" class="carousel col-lg-4 col-sm-6 col-10">
-        <ol class="carousel-indicators visually-hidden">
-          <li data-bs-target="#myCarousel4" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel4" data-bs-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="img/cover_tornado_cactus.png" class="d-block img-fluid w-100" alt="Slide 1">
-            <a class="carousel-control-prev w-100 h-100" href="#myCarousel4" data-bs-slide="prev" data-bs-slide-to="1">
-            </a>
-          </div>
-          <div class="carousel-item">
-            <div class="card text-center d-flex justify-content-between p-2">
-              <div class="card-header">
-                <h5 class="card-title" style="color:seagreen">Tornado&reg Cactus</h5>
-              </div>
-              <div class="card-text">Have you ever tasted a CACTUS? A spiky flavor made of exotic fruits (yes, cactus is a fruit!) that will tingle you up.
-                <br>
-                <em class="text-warning">COF:30/TAU:40/VOL:0,5</em></div>
-              <div class="card-footer">
-                <a href="form.html" class="btn btn-secondary rounded-pill">Buy</a>
-              </div>
-              <a class="carousel-control-prev w-100 h-75 pb-25" href="#myCarousel4" data-bs-slide="prev" data-bs-slide-to="0">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="myCarousel5" class="carousel col-lg-4 col-sm-6 col-10">
-        <ol class="carousel-indicators visually-hidden">
-          <li data-bs-target="#myCarousel5" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel5" data-bs-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="img/cover_gorilla_mint.png" class="d-block img-fluid w-100" alt="Slide 1">
-            <a class="carousel-control-prev w-100 h-100" href="#myCarousel5" data-bs-slide="prev" data-bs-slide-to="1">
-            </a>
-          </div>
-          <div class="carousel-item">
-            <div class="card text-center d-flex justify-content-between p-2">
-              <div class="card-header">
-                <h5 class="card-title" style="color:dodgerblue">Gorilla Mint</h5>
-              </div>
-              <div class="card-text">Mint tic tac in a liquid form. Don't freeze your lips!
-                <br>
-                <em class="text-warning">COF:27/TAU:30/VOL:0,5</em></div>
-              <div class="card-footer">
-                <a href="form.html" class="btn btn-secondary rounded-pill">Buy</a>
-              </div>
-              <a class="carousel-control-prev w-100 h-75 pb-25" href="#myCarousel5" data-bs-slide="prev" data-bs-slide-to="0">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="myCarousel6" class="carousel col-lg-4 col-sm-6 col-10">
-        <ol class="carousel-indicators visually-hidden">
-          <li data-bs-target="#myCarousel6" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel6" data-bs-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="img/cover_redbull_red.png" class="d-block img-fluid w-100" alt="Slide 1">
-            <a class="carousel-control-prev w-100 h-100" href="#myCarousel6" data-bs-slide="prev" data-bs-slide-to="1">
-            </a>
-          </div>
-          <div class="carousel-item">
-            <div class="card text-center d-flex justify-content-between p-2">
-              <div class="card-header">
-                <h5 class="card-title" style="color:red">RedBull&reg Red Edition</h5>
-              </div>
-              <div class="card-text">Red stands for Really ExiteD4theWATERMELONTASTE! Classical RedBull&reg quality, now flavored with your favourite summer dish!
-                <br>
-                <em class="text-warning">COF:32/TAU:400/VOL:0,25</em></div>
-              <div class="card-footer">
-                <a href="form.html" class="btn btn-secondary rounded-pill">Buy</a>
-              </div>
-              <a class="carousel-control-prev w-100 h-75 pb-25" href="#myCarousel6" data-bs-slide="prev" data-bs-slide-to="0">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row g-1 mx-auto my-2 justify-content-around d-none">
-      <div id="myCarousel7" class="carousel col-lg-4 col-sm-6 col-10">
-        <ol class="carousel-indicators visually-hidden">
-          <li data-bs-target="#myCarousel7" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel7" data-bs-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="img/cover_nonstop_original.png" class="d-block img-fluid w-100" alt="Slide 1">
-            <a class="carousel-control-prev w-100 h-100" href="#myCarousel7" data-bs-slide="prev" data-bs-slide-to="1">
-            </a>
-          </div>
-          <div class="carousel-item">
-            <div class="card text-center d-flex justify-content-between p-2">
-              <div class="card-header">
-                <h5 class="card-title" style="color:deepskyblue">NonStop Original</h5>
-              </div>
-              <div class="card-text">A classic taste straight from our beloved post-apocalyptic game! A blowout is coming, stalkers...
-                <br>
-                <em class="text-warning">COF:30/TAU:400/VOL:0,5</em></div>
-              <div class="card-footer">
-                <a href="form.html" class="btn btn-secondary rounded-pill">Buy</a>
-              </div>
-              <a class="carousel-control-prev w-100 h-75 pb-25" href="#myCarousel7" data-bs-slide="prev" data-bs-slide-to="0">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="myCarousel8" class="carousel col-lg-4 col-sm-6 col-10">
-        <ol class="carousel-indicators visually-hidden">
-          <li data-bs-target="#myCarousel8" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel8" data-bs-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="img/cover_carabao_greenapple.png" class="d-block img-fluid w-100" alt="Slide 1">
-            <a class="carousel-control-prev w-100 h-100" href="#myCarousel8" data-bs-slide="prev" data-bs-slide-to="1">
-            </a>
-          </div>
-          <div class="carousel-item">
-            <div class="card text-center d-flex justify-content-between p-2">
-              <div class="card-header">
-                <h5 class="card-title" style="color:lawngreen">Carabao&reg Green Apple</h5>
-              </div>
-              <div class="card-text">Classic Carabao&reg, now with gentle apple touch. Totally green and totally energizing.
-                <br>
-                <em class="text-warning">COF:32/TAU:240/VOL:0,33</em></div>
-              <div class="card-footer">
-                <a href="form.html" class="btn btn-secondary rounded-pill">Buy</a>
-              </div>
-              <a class="carousel-control-prev w-100 h-75 pb-25" href="#myCarousel8" data-bs-slide="prev" data-bs-slide-to="0">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="myCarousel9" class="carousel col-lg-4 col-sm-6 col-10">
-        <ol class="carousel-indicators visually-hidden">
-          <li data-bs-target="#myCarousel9" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel9" data-bs-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="img/cover_monster_punch_pacific.png" class="d-block img-fluid w-100" alt="Slide 1">
-            <a class="carousel-control-prev w-100 h-100" href="#myCarousel9" data-bs-slide="prev" data-bs-slide-to="1">
-            </a>
-          </div>
-          <div class="carousel-item">
-            <div class="card text-center d-flex justify-content-between p-2">
-              <div class="card-header">
-                <h5 class="card-title" style="color:burlywood">Monster&reg Pacific Punch</h5>
-              </div>
-              <div class="card-text">Set sail with Monster&reg and this otherworldly exotic citrus flavour with a pinch of cinnamon aroma. Reminds of navy lore...
-                <br>
-                <em class="text-warning">COF:30/TAU:400/VOL:0,5</em></div>
-              <div class="card-footer">
-                <a href="form.html" class="btn btn-secondary rounded-pill">Buy</a>
-              </div>
-              <a class="carousel-control-prev w-100 h-75 pb-25" href="#myCarousel9" data-bs-slide="prev" data-bs-slide-to="0">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="myCarousel10" class="carousel col-lg-4 col-sm-6 col-10">
-        <ol class="carousel-indicators visually-hidden">
-          <li data-bs-target="#myCarousel10" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel10" data-bs-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="img/cover_cocacola_energy.png" class="d-block img-fluid w-100" alt="Slide 1">
-            <a class="carousel-control-prev w-100 h-100" href="#myCarousel10" data-bs-slide="prev" data-bs-slide-to="1">
-            </a>
-          </div>
-          <div class="carousel-item">
-            <div class="card text-center d-flex justify-content-between p-2">
-              <div class="card-header">
-                <h5 class="card-title" style="color:firebrick">CocaCola&reg Energy</h5>
-              </div>
-              <div class="card-text">Yes, this thing exists. Now you can throw away all other 'cola' energy replicas and experience the real brand and original coke flavour.
-                <br>
-                <em class="text-warning">COF:32/TAU:0/VOL:0,25</em></div>
-              <div class="card-footer">
-                <a href="form.html" class="btn btn-secondary rounded-pill">Buy</a>
-              </div>
-              <a class="carousel-control-prev w-100 h-75 pb-25" href="#myCarousel10" data-bs-slide="prev" data-bs-slide-to="0">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="myCarousel11" class="carousel col-lg-4 col-sm-6 col-10">
-        <ol class="carousel-indicators visually-hidden">
-          <li data-bs-target="#myCarousel11" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel11" data-bs-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="img/cover_jaguar_cult.png" class="d-block img-fluid w-100" alt="Slide 1">
-            <a class="carousel-control-prev w-100 h-100" href="#myCarousel11" data-bs-slide="prev" data-bs-slide-to="1">
-            </a>
-          </div>
-          <div class="carousel-item">
-            <div class="card text-center d-flex justify-content-between p-2">
-              <div class="card-header">
-                <h5 class="card-title" style="color:crimson">Jaguar&reg Cult</h5>
-              </div>
-              <div class="card-text">Forest berries are freshly transformed into iconic 2007 hype drink. Do not overhype, but overcharge!
-                <br>
-                <em class="text-warning">COF:30/TAU:50/VOL:0,5</em></div>
-              <div class="card-footer">
-                <a href="form.html" class="btn btn-secondary rounded-pill">Buy</a>
-              </div>
-              <a class="carousel-control-prev w-100 h-75 pb-25" href="#myCarousel11" data-bs-slide="prev" data-bs-slide-to="0">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="myCarousel12" class="carousel col-lg-4 col-sm-6 col-10">
-        <ol class="carousel-indicators visually-hidden">
-          <li data-bs-target="#myCarousel12" data-bs-slide-to="0" class="active"></li>
-          <li data-bs-target="#myCarousel12" data-bs-slide-to="1"></li>
-        </ol>
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <img src="img/cover_firegin.png" class="d-block img-fluid w-100" alt="Slide 1">
-            <a class="carousel-control-prev w-100 h-100" href="#myCarousel12" data-bs-slide="prev" data-bs-slide-to="1">
-            </a>
-          </div>
-          <div class="carousel-item">
-            <div class="card text-center d-flex justify-content-between p-2">
-              <div class="card-header">
-                <h5 class="card-title" style="color:gold">Firegin</h5>
-              </div>
-              <div class="card-text">A heartrate killer from Korea. It's not a Cocaine Energy, but still will punch your grumpy face up!
-                <br>
-                <em class="text-warning">COF:50/TAU:200/VOL:0,25</em></div>
-              <div class="card-footer">
-                <a href="form.html" class="btn btn-secondary rounded-pill">Buy</a>
-              </div>
-              <a class="carousel-control-prev w-100 h-75 pb-25" href="#myCarousel12" data-bs-slide="prev" data-bs-slide-to="0">
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+
   </div>
+
+  <nav id="pagination" aria-label="Page navigation">
+    <ul id="pagination-list" class="pagination justify-content-center">
+      <!-- Pagination links will be dynamically added here using JavaScript -->
+    </ul>
+  </nav>
 
   <footer class="mt-2">
     <hr>

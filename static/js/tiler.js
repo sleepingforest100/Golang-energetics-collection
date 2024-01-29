@@ -3,19 +3,97 @@ $(document).ready(function() {
 
     ];
     var itemsPerRow = 6;
-    fetch('http://localhost:8080/energetix',{
-        credentials: 'include',
-    })
-        .then(response => response.json())
-        .then(data => {
-            items = data;
-            loadInitialItems(items);
+    var url = "http://localhost:8080/energetix";
+    var currentPage = 1;
+    var totalPages = null;
+    function fetchData(url) {
+        fetch(url, {
+            credentials: 'include',
         })
-        .catch(error => console.error('Fetching error:', error));
-    function loadInitialItems(items) {
+            .then(response => response.json())
+            .then(data => {
+                items = data;
+                loadItems(items);
+                if (totalPages!==null) {
+                    updatePagination(totalPages);
+                }
+            })
+            .catch(error => console.error('Fetching error:', error));
+    }
+    function fetchTotal(){
+        fetch('http://localhost:8080/pages', {
+            credentials: 'include',
+        })
+            .then(response => response.json())
+            .then(data => {
+                totalPages = data.Pages;
+            })
+            .catch(error => console.error('Fetching total error:', error));
+    }
+    async function init(){
+        await fetchTotal();
+        await fetchData(constructUrl());
+    }
+    init();
+    function loadItems(items) {
         var container = $('#tiles');
+        container.empty();
         createCarousels(items, container);
     }
+    function constructUrl(){
+        const baseUrl = url;
+        const sortSelect = document.getElementById('sortingSelect');
+        const filterCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+        const filterInputboxes = document.querySelectorAll('input[type="text"]');
+
+        let newurl = `${baseUrl}?page=${currentPage}`;
+        // Add sort option to the URL
+        if (sortSelect.value !== 'default') {
+            let sort = sortSelect.value.toString().split('/');
+            newurl += `&sort=${sort[0]}&order=${sort[1]}`;
+        }
+
+        // Add filter options to the URL
+        if (filterCheckboxes.length > 0) {
+            const filters = Array.from(filterCheckboxes).map(checkbox => checkbox.value);
+            for (let i = 0;i<filters.length;i++){
+                newurl += `&${filters[i]}`
+            }
+        }
+        if (filterInputboxes.length > 0){
+            const inputFilters = Array.from(filterInputboxes).map(inputbox => {
+                const inputValue = inputbox.value.trim();
+                const inputId = inputbox.dataset.id;
+
+                if (inputValue !== "") {
+                    return `${inputId}${inputValue}`;
+                }
+                return null;
+            });
+            const filteredInputValues = inputFilters.filter(value => value !== null);
+            if (filteredInputValues.length > 0) {
+                for (let i = 0;i<filteredInputValues.length;i++){
+                    newurl += `&${filteredInputValues[i]}`
+                }
+            }
+        }
+
+
+        console.log('Fetch url: ' +newurl)
+        return newurl;
+    }
+
+
+    document.getElementById('sortingSelect').addEventListener('change', function (){
+        currentPage = 1;
+        fetchData(constructUrl());
+    });
+    document.getElementById('gofilter').addEventListener('click', function (){
+        currentPage = 1;
+        fetchData(constructUrl());
+    });
+
+
     function deleteEntry(id) {
         if (confirm('Are you sure you want to delete this entry?')) {
             fetch(`http://localhost:8080/energetix/${id}`, {
@@ -30,6 +108,79 @@ $(document).ready(function() {
                     }
                 })
                 .catch(error => console.error('Error deleting entry:', error));
+        }
+    }
+    function updatePagination(totalPages) {
+        const paginationElement = document.getElementById('pagination');
+        const paginationList = document.getElementById('pagination-list');
+        paginationList.innerHTML = ''; // Clear existing pagination links
+
+        const maxPagesToShow = 5; // Maximum number of pages to display
+
+        // Calculate the start and end page numbers for display
+        let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+        let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+        // Adjust startPage and endPage if the current page is near the beginning or end
+        if (endPage - startPage + 1 < maxPagesToShow) {
+            startPage = Math.max(1, endPage - maxPagesToShow + 1);
+        }
+
+        // Add previous button
+        if (currentPage > 1) {
+            const prevPageItem = document.createElement('li');
+            prevPageItem.className = 'page-item';
+
+            const prevPageLink = document.createElement('a');
+            prevPageLink.className = 'page-link';
+            prevPageLink.href = '#';
+            prevPageLink.textContent = 'Previous';
+            prevPageLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                currentPage--;
+                fetchData(constructUrl());
+            });
+
+            prevPageItem.appendChild(prevPageLink);
+            paginationList.appendChild(prevPageItem);
+        }
+
+        // Add page links
+        for (let i = startPage; i <= endPage; i++) {
+            const pageItem = document.createElement('li');
+            pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
+
+            const pageLink = document.createElement('a');
+            pageLink.className = 'page-link';
+            pageLink.href = '#';
+            pageLink.textContent = i;
+            pageLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                currentPage = i;
+                fetchData(constructUrl());
+            });
+
+            pageItem.appendChild(pageLink);
+            paginationList.appendChild(pageItem);
+        }
+
+        // Add next button
+        if (currentPage < totalPages) {
+            const nextPageItem = document.createElement('li');
+            nextPageItem.className = 'page-item';
+
+            const nextPageLink = document.createElement('a');
+            nextPageLink.className = 'page-link';
+            nextPageLink.href = '#';
+            nextPageLink.textContent = 'Next';
+            nextPageLink.addEventListener('click', function(event) {
+                event.preventDefault();
+                currentPage++;
+                fetchData(constructUrl());
+            });
+
+            nextPageItem.appendChild(nextPageLink);
+            paginationList.appendChild(nextPageItem);
         }
     }
     function createCarousels(items, container) {

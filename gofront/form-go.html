@@ -4,18 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Energetix</title>
-  <link rel="stylesheet" href="./css/custom.css">
-  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/custom.css">
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="icon" href="./img/favicon.png">
+  <link rel="icon" href="/static/img/favicon.png">
 </head>
 <body>
 <main class="mx-lg-4 mx-sm-2 mx-2 position-relative overflow-hidden" id="toppage">
   <nav class="navbar navbar-expand-lg navbar-light bg-light position-sticky sticky-top">
     <div class="container-fluid">
       <a onclick="document.getElementById('toppage').scrollIntoView({behavior:'smooth'});" class="navbar-brand">
-        <img src="img/favicon.png" class="rounded-circle" height="50" alt="Logo">
+        <img src="/static/img/favicon.png" class="rounded-circle" height="50" alt="Logo">
       </a>
       <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
         <span class="navbar-toggler-icon"></span>
@@ -84,12 +84,12 @@
     <div class="row g-1 mb-2">
       <div class="col-6 px-1">
         <label class="form-label" for="caf">Caffeine content</label>
-        <input type="text" class="w-100 rounded border-1 h-50 p-3" id="caf" placeholder="Caffeine" required>
+        <input type="number" class="w-100 rounded border-1 h-50 p-3" id="caf" placeholder="Caffeine" required>
         <small class="invalid-feed d-none" id="if5">This field is required. Numbers are not accepted.</small>
       </div>
       <div class="col-6 px-1">
         <label class="form-label" for="tau">Taurine content</label>
-        <input type="text" class="w-100 rounded border-1 h-50 p-3" id="tau" placeholder="Taurine" required>
+        <input type="number" class="w-100 rounded border-1 h-50 p-3" id="tau" placeholder="Taurine" required>
         <small class="invalid-feed d-none" id="if6">This field is required. Numbers are not accepted.</small>
       </div>
     </div>
@@ -179,9 +179,9 @@
         })
                 .then(response => {
                   if (response.ok) {
-                    window.location.href = 'index-go.html';
+                    window.location.href = './index-go.html';
                   } else {
-                    window.location.href = 'index-go.html';
+                    window.location.href = './index-go.html';
                     console.error('Failed to create new entry:', response.statusText);
                   }
                 })
@@ -190,6 +190,6 @@
     }
   </script>
 </main>
-<script src="./js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

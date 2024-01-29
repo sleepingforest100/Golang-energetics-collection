@@ -74,7 +74,10 @@ func main() {
 	router.HandleFunc("/energetix/{id}", deleteEnergeticById).Methods("DELETE")
 	router.HandleFunc("/pages", getNumberOfPages).Methods("GET")
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "gofront/index-go.html")
+		http.ServeFile(w, r, "index-go.html")
+	})
+	router.HandleFunc("/form", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "form-go.html")
 	})
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
@@ -297,6 +300,7 @@ func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
 }
 
 func getNumberOfPages(w http.ResponseWriter, r *http.Request) {
+	db.Find(&energeticsList)
 	count := int(math.Ceil(float64(len(energeticsList)) / float64(limit)))
 	number := pagesCount{Pages: count}
 	json.NewEncoder(w).Encode(number)
