@@ -87,12 +87,14 @@ func initDB() {
 	}
 
 	db.AutoMigrate(&Energetic{}, &Composition{})
+	logrus.Info("Automigration for energetics and compositions")
 }
 
 func main() {
 	initLog()
 	initDB()
 	db.Preload("Composition").Find(&energeticsList)
+	logrus.Info("Preload energetics collection")
 
 	router := mux.NewRouter()
 	router.HandleFunc("/energetix", getEnergetics).Methods("GET")
@@ -102,10 +104,7 @@ func main() {
 	router.HandleFunc("/energetix/{id}", deleteEnergeticById).Methods("DELETE")
 	router.HandleFunc("/pages", getNumberOfPages).Methods("GET")
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "index-go.html")
-	})
-	router.HandleFunc("/form", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "form-go.html")
+		http.ServeFile(w, r, "gofront/index-go.html")
 	})
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
@@ -115,31 +114,16 @@ func main() {
 	credentials := handlers.AllowCredentials()
 	http.Handle("/", handlers.CORS(headers, origins, methods, credentials)(router))
 	erro := http.ListenAndServe(":8080", nil)
+	logrus.WithFields(logrus.Fields{
+		"module":   "main",
+		"function": "main",
+		"action":   "servers starts",
+		"port":     "8080",
+	}).Info("Server launches")
 	if erro != nil {
+		logrus.Panic("Server did not run")
 		panic(erro)
 	}
-
-}
-
-func createEnergetic(db *gorm.DB,
-	name, taste, description, manufacturerName, manufactureCountry, pictureURL string, caffeine, taurine uint) error {
-	newEnergetic := Energetic{
-		Name:               name,
-		Taste:              taste,
-		Description:        description,
-		ManufacturerName:   manufacturerName,
-		ManufactureCountry: manufactureCountry,
-		PictureURL:         pictureURL,
-		Composition: Composition{
-			Caffeine: caffeine,
-			Taurine:  taurine,
-		},
-	}
-	result := db.Create(&newEnergetic)
-	if result.Error != nil {
-		return result.Error
-	}
-	return nil
 }
 
 func getEnergetics(w http.ResponseWriter, r *http.Request) {
