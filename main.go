@@ -103,9 +103,17 @@ func main() {
 	router.HandleFunc("/energetix/{id}", updateEnergeticsById).Methods("PUT")
 	router.HandleFunc("/energetix/{id}", deleteEnergeticById).Methods("DELETE")
 	router.HandleFunc("/pages", getNumberOfPages).Methods("GET")
+
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "gofront/index-go.html")
+		http.Redirect(w, r, "index-go.html", http.StatusSeeOther)
 	})
+	router.HandleFunc("/index-go.html", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "index-go.html")
+	})
+	router.HandleFunc("/form-go.html", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "form-go.html")
+	})
+
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
@@ -196,14 +204,44 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 		page = "1"
 	}
 
+	logrus.WithFields(logrus.Fields{
+		"module":   "main",
+		"function": "getEnergetics",
+		"action":   "query params updating",
+		"queryParams": logrus.Fields{
+			"sort":                sort,
+			"order":               order,
+			"taurine_gte":         taurine_gte,
+			"taurine_lte":         taurine_lte,
+			"caffeine_gte":        caffeine_gte,
+			"caffeine_lte":        caffeine_lte,
+			"taste":               taste,
+			"energeticName":       nameEn,
+			"manufacturerName":    manufacturerName,
+			"manufacturerCountry": manufacturerCountry,
+		},
+	}).Info("Fixing parametrs from the query")
+
 	pageInt, errConv := strconv.Atoi(page)
-	offset := (pageInt - 1) * limit
-	print(offset)
+
+	logrus.WithFields(logrus.Fields{
+		"function": "getEnergetics",
+		"action":   "converting str  to int",
+		"page":     page,
+		"pageInt":  pageInt,
+	}).Info("Attempt to convert param 'page' to int")
 
 	if errConv != nil {
 		http.Error(w, "Failed to parse page number", http.StatusInternalServerError)
+		logrus.Error("Failed to convert page to int")
 		return
 	}
+
+	offset := (pageInt - 1) * limit
+	logrus.WithFields(logrus.Fields{
+		"function": "getEnergetics",
+		"offset":   offset,
+	}).Info("Computing offset")
 
 	err := db.
 		Model(&Energetic{}).
@@ -216,16 +254,42 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 			"%"+manufacturerName+"%", "%"+manufacturerCountry+"%").
 		Error
 
+	logrus.WithFields(logrus.Fields{
+		"function": "getEnergetics",
+		"action":   "search energetics in db using filters, sorting and pages",
+		"sorting": logrus.Fields{
+			"sort":  sort,
+			"order": order,
+		},
+		"pagination": logrus.Fields{
+			"page":   pageInt,
+			"limit":  limit,
+			"offset": offset,
+		},
+		"filters": logrus.Fields{
+			"taurine_gte":         taurine_gte,
+			"taurine_lte":         taurine_lte,
+			"caffeine_gte":        caffeine_gte,
+			"caffeine_lte":        caffeine_lte,
+			"taste":               taste,
+			"energeticName":       nameEn,
+			"manufacturerName":    manufacturerName,
+			"manufacturerCountry": manufacturerCountry,
+		},
+	}).Info("DB.FIND()")
+
 	if err != nil {
 		http.Error(w, "Failed to marshal JSON with sorting", http.StatusInternalServerError)
+		logrus.Error("Couldn't execute query")
 		return
+
 	}
 
-	logrus.Info("Info message")
-
 	responseJSON, err := json.Marshal(energeticsList)
+	logrus.Info("Sending energetics list json as a response")
 	if err != nil {
 		http.Error(w, "Failed to marshal JSON", http.StatusInternalServerError)
+		logrus.Error("Couldn't marshal JSON")
 		return
 	}
 	w.Write(responseJSON)
@@ -234,13 +298,19 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 func getEnergeticsById(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	var energetic1 Energetic
-
 	db.AutoMigrate(&Energetic{}, &Composition{})
 	err2 := db.Preload("Composition").First(&energetic1, params["id"]).Error
+
+	logrus.WithFields(logrus.Fields{
+		"function":      "getEnergeticsById",
+		"action":        "getting 1 energetic by id",
+		"energetics_id": params["id"],
+	}).Info("Attemt to get energetics by ID " + params["id"] + " .db.First()")
 
 	if err2 != nil {
 		answer := Message{Status: "404", Message: "Energy drink with such ID does not exist"}
 		json.NewEncoder(w).Encode(answer)
+		logrus.Info("Energy drink with " + params["id"] + " was not found in DB")
 		return
 	}
 	json.NewEncoder(w).Encode(energetic1)
@@ -248,25 +318,56 @@ func getEnergeticsById(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
+	logrus.WithFields(logrus.Fields{
+		"function": "updateEnergeticsById",
+		"action":   "launching of updating 1 energetic by id",
+	}).Info("updateEnergeticsById() starts")
+
 	params := mux.Vars(r)
 	targetID, err := strconv.ParseUint(params["id"], 10, 64)
+	logrus.WithFields(logrus.Fields{
+		"function":      "updateEnergeticsById",
+		"action":        "convert id to int",
+		"energetics_id": targetID,
+	}).Info("parsed ID for updating")
+
 	if err != nil {
 		answer := Message{Status: "400", Message: "Incorrect id"}
 		json.NewEncoder(w).Encode(answer)
-		return
-	}
-	var updatedEnergetic Energetic
-	if err := json.NewDecoder(r.Body).Decode(&updatedEnergetic); err != nil {
-		answer := Message{Status: "404", Message: "Invalid JSON message"}
-		json.NewEncoder(w).Encode(answer)
+		logrus.Error("Error with parsing id to int")
 		return
 	}
 
+	var updatedEnergetic Energetic
+
+	if err := json.NewDecoder(r.Body).Decode(&updatedEnergetic); err != nil {
+		answer := Message{Status: "404", Message: "Invalid JSON message"}
+		json.NewEncoder(w).Encode(answer)
+		logrus.WithFields(logrus.Fields{
+			"function":    "updateEnergeticsById",
+			"action":      "reading attributes for update",
+			"requestBody": r.Body,
+		}).Error("Incorrect energetic fields")
+		return
+	}
+
+	logrus.WithFields(logrus.Fields{
+		"function":    "updateEnergeticsById",
+		"action":      "reading attributes for update",
+		"requestBody": r.Body,
+	}).Info("Correct fields for updating were accepted")
+
 	db.AutoMigrate(&Energetic{}, &Composition{})
 	var existingEnergetic Energetic
+
 	if err := db.Preload("Composition").First(&existingEnergetic, targetID).Error; err != nil {
 		answer := Message{Status: "404", Message: "Energy drink with such ID does not exist"}
 		json.NewEncoder(w).Encode(answer)
+		logrus.WithFields(logrus.Fields{
+			"function": "updateEnergeticsById",
+			"action":   "check if such energetic exists",
+			"targetID": targetID,
+		}).Error("Energetic with such ID cannot be found")
 		return
 	}
 
@@ -282,6 +383,22 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 
 	db.Session(&gorm.Session{FullSaveAssociations: true}).Save(&existingEnergetic)
 
+	logrus.WithFields(logrus.Fields{
+		"function": "updateEnergeticsById",
+		"action":   "updating all fields",
+		"targetID": targetID,
+		"changes": logrus.Fields{
+			"name":                existingEnergetic.Name,
+			"taste":               existingEnergetic.Taste,
+			"description":         existingEnergetic.Description,
+			"manufacturerName":    existingEnergetic.ManufactureCountry,
+			"manufactureCountry ": existingEnergetic.ManufactureCountry,
+			"pictureURL":          existingEnergetic.PictureURL,
+			"caffeine":            existingEnergetic.Composition.Caffeine,
+			"taurine":             existingEnergetic.Composition.Taurine,
+		},
+	}).Error("The energetic was updated")
+
 	w.WriteHeader(http.StatusOK)
 	answer := Message{Status: "200", Message: "Energy drink was updated"}
 	json.NewEncoder(w).Encode(answer)
@@ -290,9 +407,18 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 
 func postEnergetic(w http.ResponseWriter, r *http.Request) {
 	var newEnergetic Energetic
+
+	logrus.WithFields(logrus.Fields{
+		"function": "postEnergetic",
+	}).Info("Post energetic method runs")
+
 	if err := json.NewDecoder(r.Body).Decode(&newEnergetic); err != nil {
 		answer := Message{Status: "404", Message: "Invalid JSON message"}
 		json.NewEncoder(w).Encode(answer)
+		logrus.WithFields(logrus.Fields{
+			"function": "postEnergetic",
+			"action":   "attempt to decoding json",
+		}).Error("Invalid json message was recieved")
 		return
 	}
 
@@ -301,32 +427,64 @@ func postEnergetic(w http.ResponseWriter, r *http.Request) {
 	if err := db.Create(&newEnergetic).Error; err != nil {
 		answer := Message{Status: "404", Message: "Invalid JSON message"}
 		json.NewEncoder(w).Encode(answer)
+		logrus.WithFields(logrus.Fields{
+			"function": "postEnergetic",
+			"action":   "creating new energetic",
+		}).Error("Json message fields are not appropriate for energetics collection")
 		return
 	}
+
+	logrus.WithFields(logrus.Fields{
+		"function": "postEnergetic",
+		"action":   "creating new energetic",
+	}).Info("Sucessful create of energetic")
+
 	db.Preload("Composition").Find(&energeticsList)
+	logrus.Info("Updating energetics List by preloading and find")
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(newEnergetic)
 }
 
 func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
+
+	logrus.WithFields(logrus.Fields{
+		"function": "deleteEnergeticById",
+	}).Info("Delete energetic method runs")
+
 	params := mux.Vars(r)
 	targetID, err := strconv.ParseUint(params["id"], 10, 64)
+
+	logrus.WithFields(logrus.Fields{
+		"function":      "deleteEnergeticById",
+		"action":        "convert id to int",
+		"energetics_id": targetID,
+	}).Info("parsed ID for deleting")
+
 	if err != nil {
 		answer := Message{Status: "400", Message: "Incorrect id"}
 		json.NewEncoder(w).Encode(answer)
+		logrus.Error("Error with parsing id to int")
 		return
 	}
 	db.AutoMigrate(&Energetic{}, &Composition{})
 
+	logrus.WithFields(logrus.Fields{
+		"function":      "deleteEnergeticById",
+		"action":        "attempt to delete energetic",
+		"energetics_id": targetID,
+	}).Info("Deleting energetic by ID")
+
 	if err := db.Delete(&Energetic{}, targetID).Error; err != nil {
-		answer := Message{Status: "404", Message: "Invalid JSON message"}
+		answer := Message{Status: "404", Message: "Invalid id"}
 		json.NewEncoder(w).Encode(answer)
+		logrus.Error("Deleting unexisting energetic")
 		return
 	}
 	db.Preload("Composition").Find(&energeticsList)
 
 	answer := Message{Status: "410", Message: "Energy drink was deleted successfully"}
+	logrus.Info("Energetic was deleted")
 	json.NewEncoder(w).Encode(answer)
 	w.WriteHeader(http.StatusOK)
 }
@@ -335,5 +493,12 @@ func getNumberOfPages(w http.ResponseWriter, r *http.Request) {
 	db.Find(&energeticsList)
 	count := int(math.Ceil(float64(len(energeticsList)) / float64(limit)))
 	number := pagesCount{Pages: count}
+
+	logrus.WithFields(logrus.Fields{
+		"function":      "getNumberOfPages",
+		"action":        "counting number of pages",
+		"numberOfPages": count,
+	}).Info("Count number of pages")
+
 	json.NewEncoder(w).Encode(number)
 }
