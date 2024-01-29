@@ -103,9 +103,17 @@ func main() {
 	router.HandleFunc("/energetix/{id}", updateEnergeticsById).Methods("PUT")
 	router.HandleFunc("/energetix/{id}", deleteEnergeticById).Methods("DELETE")
 	router.HandleFunc("/pages", getNumberOfPages).Methods("GET")
+
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.ServeFile(w, r, "gofront/index-go.html")
+		http.Redirect(w, r, "index-go.html", http.StatusSeeOther)
 	})
+	router.HandleFunc("/index-go.html", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "index-go.html")
+	})
+	router.HandleFunc("/form-go.html", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "form-go.html")
+	})
+
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})

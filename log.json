@@ -14,3 +14,25 @@
 {"level":"info","msg":"Automigration for energetics and compositions","time":"2024-01-30T03:57:32+06:00"}
 {"action":"query reading","function":"getEnergetics","level":"info","module":"main","msg":"Initializating of parametrs from the query","queryParams":{"caffeine_gte":"","caffeine_lte":"","energeticName":"","manufacturerCountry":"","manufacturerName":"","order":"","sort":"","taste":"","taurine_gte":"","taurine_lte":""},"time":"2024-01-30T03:57:32+06:00"}
 {"level":"info","msg":"Info message","time":"2024-01-30T03:57:32+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-01-30T04:01:44+06:00"}
+{"action":"db connection","connectionString":"host=localhost user=postgres password=222316pb dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai","function":"initDB","level":"info","module":"main","msg":"Attempt to connect to db","time":"2024-01-30T04:01:44+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-01-30T04:01:44+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-01-30T04:01:44+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-01-30T04:02:00+06:00"}
+{"action":"query reading","function":"getEnergetics","level":"info","module":"main","msg":"Initializating of parametrs from the query","queryParams":{"caffeine_gte":"","caffeine_lte":"","energeticName":"","manufacturerCountry":"","manufacturerName":"","order":"","sort":"","taste":"","taurine_gte":"","taurine_lte":""},"time":"2024-01-30T04:02:00+06:00"}
+{"level":"info","msg":"Info message","time":"2024-01-30T04:02:00+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-01-30T04:02:06+06:00"}
+{"action":"query reading","function":"getEnergetics","level":"info","module":"main","msg":"Initializating of parametrs from the query","queryParams":{"caffeine_gte":"","caffeine_lte":"","energeticName":"","manufacturerCountry":"","manufacturerName":"","order":"","sort":"","taste":"","taurine_gte":"","taurine_lte":""},"time":"2024-01-30T04:02:06+06:00"}
+{"level":"info","msg":"Info message","time":"2024-01-30T04:02:06+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-01-30T04:02:13+06:00"}
+{"action":"query reading","function":"getEnergetics","level":"info","module":"main","msg":"Initializating of parametrs from the query","queryParams":{"caffeine_gte":"","caffeine_lte":"","energeticName":"","manufacturerCountry":"","manufacturerName":"","order":"","sort":"","taste":"","taurine_gte":"","taurine_lte":""},"time":"2024-01-30T04:02:13+06:00"}
+{"level":"info","msg":"Info message","time":"2024-01-30T04:02:13+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-01-30T04:02:17+06:00"}
+{"action":"query reading","function":"getEnergetics","level":"info","module":"main","msg":"Initializating of parametrs from the query","queryParams":{"caffeine_gte":"","caffeine_lte":"","energeticName":"","manufacturerCountry":"","manufacturerName":"","order":"","sort":"","taste":"","taurine_gte":"","taurine_lte":""},"time":"2024-01-30T04:02:17+06:00"}
+{"level":"info","msg":"Info message","time":"2024-01-30T04:02:17+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-01-30T04:02:22+06:00"}
+{"action":"query reading","function":"getEnergetics","level":"info","module":"main","msg":"Initializating of parametrs from the query","queryParams":{"caffeine_gte":"","caffeine_lte":"","energeticName":"","manufacturerCountry":"","manufacturerName":"","order":"","sort":"","taste":"","taurine_gte":"","taurine_lte":""},"time":"2024-01-30T04:02:22+06:00"}
+{"level":"info","msg":"Info message","time":"2024-01-30T04:02:22+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-01-30T04:02:53+06:00"}
+{"action":"query reading","function":"getEnergetics","level":"info","module":"main","msg":"Initializating of parametrs from the query","queryParams":{"caffeine_gte":"","caffeine_lte":"","energeticName":"","manufacturerCountry":"","manufacturerName":"","order":"","sort":"","taste":"","taurine_gte":"","taurine_lte":""},"time":"2024-01-30T04:02:53+06:00"}
+{"level":"info","msg":"Info message","time":"2024-01-30T04:02:53+06:00"}
