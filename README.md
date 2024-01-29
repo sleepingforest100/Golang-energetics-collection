@@ -27,17 +27,19 @@ LAUNCH INSTRUCTIONS:
         2024/01/07 22:42:13 Finished after 383.6799ms
         2024/01/07 22:42:13 Closing source and database
      If you see these lines, the tables were created.
-  4. Open the file main.go. Install in the terminal all missing imports. For this I wrote the next commands in my VisualStudio Code Terminal:
+  4. Open the file main.go. Install in the terminal all missing imports. For this I wrote the next commands in my VisualStudio Code Terminal.
         go get -u gorm.io/gorm 
         go get -u gorm.io/driver/postgres
         go get -u github.com/lib/pq
         go get -u github.com/gorilla/handlers
         go get -u github.com/gorilla/mux
-  5. Change the password and user for db connection with yours in the function initDB(). It's very important!
-  6. Launch the application, write "go run main.go" in the terminal. Agree with your FireWall if it's neccessary.
-  7. In our current version, html page works only if launched on localhost via IntelliJ IDEA, we need to create a new HTML Bootstrap project and copy all 'gofront' folder contents into the new project. jQuery is required, check if External Libraries has it, if not - hover over a jquery link that can be found in the top of a index-go.html file. If a message with a text allowing to Download Library pops up - click on it and download. If jQuery already installed you need to include it manually via File > Project Structure > Global Libraries > Right click on jQuery > Add to Modules > Apply. Then just run index-go.html using IDEA's regular application launch button (green arrow in the top right).
-  8. Scroll page a bit lower and click on "Moderation" to the right side of the page. There you can see options to create and to find by id.
-  9. For updating and deleting you can click on the energetics cards.
+        go get -u golang.org/x/time/rate
+        go get -u github.com/sirupsen/logrus
+  6. Change the password and user for db connection with yours in the function initDB(). It's very important!
+  7. Launch the application, write "go run main.go" in the terminal. Agree with your FireWall if it's neccessary.
+  8. In our current version, html page works only if launched on localhost via IntelliJ IDEA, we need to create a new HTML Bootstrap project and copy all 'gofront' folder contents into the new project. jQuery is required, check if External Libraries has it, if not - hover over a jquery link that can be found in the top of a index-go.html file. If a message with a text allowing to Download Library pops up - click on it and download. If jQuery already installed you need to include it manually via File > Project Structure > Global Libraries > Right click on jQuery > Add to Modules > Apply. Then just run index-go.html using IDEA's regular application launch button (green arrow in the top right).
+  9. Scroll page a bit lower and click on "Moderation" to the right side of the page. There you can see options to create and to find by id.
+  10. For updating and deleting you can click on the energetics cards.
      ![screenshot2](https://github.com/PollyBreak/Golang-energetics-collection/assets/88556120/05fff3c9-0479-4edd-958f-6b7ea3c8605a)
 
 
