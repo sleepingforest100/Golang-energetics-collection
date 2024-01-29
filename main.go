@@ -74,6 +74,10 @@ func main() {
 	router.HandleFunc("/energetix/{id}", getEnergeticsById).Methods("GET")
 	router.HandleFunc("/energetix/{id}", updateEnergeticsById).Methods("PUT")
 	router.HandleFunc("/energetix/{id}", deleteEnergeticById).Methods("DELETE")
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "gofront/index-go.html")
+	})
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	headers := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
 	origins := handlers.AllowedOrigins([]string{"http://localhost:63342", "http://127.0.0.1:5500"})
