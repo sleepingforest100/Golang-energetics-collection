@@ -15,6 +15,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/sirupsen/logrus"
+	"golang.org/x/time/rate"
 )
 
 type Message struct {
@@ -54,6 +55,8 @@ var db *gorm.DB
 var limit = 3
 
 var logFile = "log.json"
+
+var limiter = rate.NewLimiter(1, 3)
 
 func initLog() {
 	f, err := os.OpenFile(logFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
