@@ -104,15 +104,45 @@ func createEnergetic(db *gorm.DB,
 }
 
 func getEnergetics(w http.ResponseWriter, r *http.Request) {
-
 	db.AutoMigrate(&Energetic{}, &Composition{})
-	db.Preload("Composition").Find(&energeticsList)
+
+	sort := r.FormValue("sort")
+	order := r.FormValue("order")
+
+	if len(sort) > 0 && len(order) > 0 {
+		err := db.
+			Model(&Energetic{}).
+			Joins("Composition").
+			Order(sort + " " + order).
+			Find(&energeticsList).
+			Error
+
+		if err != nil {
+			http.Error(w, "Failed to marshal JSON with sorting", http.StatusInternalServerError)
+			return
+		}
+	}
+
+	// db.Table("compositions").
+	// 	Select("compositions.*, energetics.*").
+	// 	Joins("INNER JOIN energetics ON energetics.composition_id = compositions.energetics_id"). // After this you can order by any field
+	// 	Order("taurine asc").Find(&energeticsList)
+
+	// err := db.
+	// 	Model(&Energetic{}).
+	// 	Joins("Composition").
+	// 	Order("taurine DESC").
+	// 	Find(&energeticsList).
+	// 	Error
+
+	// db.Preload("Composition").Find(&energeticsList)
 
 	responseJSON, err := json.Marshal(energeticsList)
 	if err != nil {
 		http.Error(w, "Failed to marshal JSON", http.StatusInternalServerError)
 		return
 	}
+
 	w.Write(responseJSON)
 }
 
