@@ -203,19 +203,24 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 	}
 
 	db.AutoMigrate(&Energetic{}, &Composition{})
-
 	var existingEnergetic Energetic
-	if err := db.First(&existingEnergetic, targetID).Error; err != nil {
+	if err := db.Preload("Composition").First(&existingEnergetic, targetID).Error; err != nil {
 		answer := Message{Status: "404", Message: "Energy drink with such ID does not exist"}
 		json.NewEncoder(w).Encode(answer)
 		return
 	}
 
-	existingEnergetic.Composition = updatedEnergetic.Composition
+	existingEnergetic.Name = updatedEnergetic.Name
+	existingEnergetic.Taste = updatedEnergetic.Taste
+	existingEnergetic.Description = updatedEnergetic.Description
+	existingEnergetic.ManufacturerName = updatedEnergetic.ManufacturerName
+	existingEnergetic.ManufactureCountry = updatedEnergetic.ManufactureCountry
+	existingEnergetic.PictureURL = updatedEnergetic.PictureURL
 
-	db.Session(&gorm.Session{FullSaveAssociations: true}).Model(&existingEnergetic).Updates(&updatedEnergetic)
+	existingEnergetic.Composition.Caffeine = updatedEnergetic.Composition.Caffeine
+	existingEnergetic.Composition.Taurine = updatedEnergetic.Composition.Taurine
 
-	db.Preload("Composition").Find(&energeticsList)
+	db.Session(&gorm.Session{FullSaveAssociations: true}).Save(&existingEnergetic)
 
 	w.WriteHeader(http.StatusOK)
 	answer := Message{Status: "200", Message: "Energy drink was updated"}
