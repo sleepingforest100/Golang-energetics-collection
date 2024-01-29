@@ -118,6 +118,8 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 	manufacturerName := r.FormValue("manufacturer")
 	manufacturerCountry := r.FormValue("country")
 
+	page := r.FormValue("page")
+
 	if len(taurine_gte) < 1 {
 		taurine_gte = "0"
 	}
@@ -148,9 +150,25 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 		order = "desc"
 	}
 
+	if len(page) < 1 {
+		page = "1"
+	}
+
+	pageInt, errConv := strconv.Atoi(page)
+	limit := 3
+	offset := (pageInt - 1) * limit
+	print(offset)
+
+	if errConv != nil {
+		http.Error(w, "Failed to parse page number", http.StatusInternalServerError)
+		return
+	}
+
 	err := db.
 		Model(&Energetic{}).
 		Joins("Composition").
+		Limit(limit).
+		Offset(offset).
 		Order(sort+" "+order).
 		Find(&energeticsList, "name ILIKE ? AND taste ILIKE ? AND taurine >= ? AND taurine <= ? AND caffeine >= ? AND caffeine <= ? AND manufacturer_name ILIKE ? AND manufacture_country ILIKE ?",
 			"%"+nameEn+"%", "%"+taste+"%", taurine_gte, taurine_lte, caffeine_gte, caffeine_lte,
