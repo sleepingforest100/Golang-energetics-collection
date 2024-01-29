@@ -128,6 +128,7 @@ func main() {
 
 func getEnergetics(w http.ResponseWriter, r *http.Request) {
 	db.AutoMigrate(&Energetic{}, &Composition{})
+	logrus.Info("Automigration for energetics and compositions")
 
 	sort := r.FormValue("sort")
 	order := r.FormValue("order")
@@ -142,6 +143,24 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 	manufacturerCountry := r.FormValue("country")
 
 	page := r.FormValue("page")
+
+	logrus.WithFields(logrus.Fields{
+		"module":   "main",
+		"function": "getEnergetics",
+		"action":   "query reading",
+		"queryParams": logrus.Fields{
+			"sort":                sort,
+			"order":               order,
+			"taurine_gte":         taurine_gte,
+			"taurine_lte":         taurine_lte,
+			"caffeine_gte":        caffeine_gte,
+			"caffeine_lte":        caffeine_lte,
+			"taste":               taste,
+			"energeticName":       nameEn,
+			"manufacturerName":    manufacturerName,
+			"manufacturerCountry": manufacturerCountry,
+		},
+	}).Info("Initializating of parametrs from the query")
 
 	if len(taurine_gte) < 1 {
 		taurine_gte = "0"
