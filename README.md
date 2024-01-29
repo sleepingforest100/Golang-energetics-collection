@@ -45,7 +45,7 @@ LAUNCH INSTRUCTIONS:
 
        
 TOOLS STACK: 
-  BACKEND: Golang, Postgres, GORM (ORM library), golang-migrate, 
+  BACKEND: Golang, Postgres, GORM (ORM library), golang-migrate, logrus, /x/time/rate
   FRONTEND:HTML, CSS, JavaScript
 
 LINKS TO SOURCES
