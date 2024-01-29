@@ -109,7 +109,40 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 	sort := r.FormValue("sort")
 	order := r.FormValue("order")
 
-	// if len(sort) > 0 && len(order) > 0 {
+	taurine_gte := r.FormValue("taurine_gte")
+	taurine_lte := r.FormValue("taurine_lte")
+	caffeine_gte := r.FormValue("caffeine_gte")
+	caffeine_lte := r.FormValue("caffeine_lte")
+	taste := r.FormValue("taste")
+	nameEn := r.FormValue("name")
+	manufacturerName := r.FormValue("manufacturer")
+	manufacturerCountry := r.FormValue("country")
+
+	if len(taurine_gte) < 1 {
+		taurine_gte = "0"
+	}
+	if len(taurine_lte) < 1 {
+		taurine_lte = "500000"
+	}
+	if len(caffeine_gte) < 1 {
+		caffeine_gte = "0"
+	}
+	if len(caffeine_lte) < 1 {
+		caffeine_lte = "500000"
+	}
+	if len(taste) < 1 {
+		taste = ""
+	}
+	if len(nameEn) < 1 {
+		nameEn = ""
+	}
+	if len(manufacturerName) < 1 {
+		manufacturerName = ""
+	}
+	if len(manufacturerCountry) < 1 {
+		manufacturerCountry = ""
+	}
+
 	if len(sort) < 1 && len(order) < 1 {
 		sort = "energetics_id"
 		order = "desc"
@@ -118,31 +151,18 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 	err := db.
 		Model(&Energetic{}).
 		Joins("Composition").
-		Order(sort + " " + order).
-		Find(&energeticsList).
+		Order(sort+" "+order).
+		Find(&energeticsList, "name ILIKE ? AND taste ILIKE ? AND taurine >= ? AND taurine <= ? AND caffeine >= ? AND caffeine <= ? AND manufacturer_name ILIKE ? AND manufacture_country ILIKE ?",
+			"%"+nameEn+"%", "%"+taste+"%", taurine_gte, taurine_lte, caffeine_gte, caffeine_lte,
+			"%"+manufacturerName+"%", "%"+manufacturerCountry+"%").
 		Error
 
 	if err != nil {
 		http.Error(w, "Failed to marshal JSON with sorting", http.StatusInternalServerError)
 		return
 	}
-	// }
 
-	// db.Table("compositions").
-	// 	Select("compositions.*, energetics.*").
-	// 	Joins("INNER JOIN energetics ON energetics.composition_id = compositions.energetics_id"). // After this you can order by any field
-	// 	Order("taurine asc").Find(&energeticsList)
-
-	// err := db.
-	// 	Model(&Energetic{}).
-	// 	Joins("Composition").
-	// 	Order("taurine DESC").
-	// 	Find(&energeticsList).
-	// 	Error
-
-	// db.Preload("Composition").Find(&energeticsList)
 	responseJSON, err := json.Marshal(energeticsList)
-
 	if err != nil {
 		http.Error(w, "Failed to marshal JSON", http.StatusInternalServerError)
 		return
@@ -185,23 +205,17 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 	db.AutoMigrate(&Energetic{}, &Composition{})
 
 	var existingEnergetic Energetic
-	if err := db.Preload("Composition").First(&existingEnergetic, targetID).Error; err != nil {
+	if err := db.First(&existingEnergetic, targetID).Error; err != nil {
 		answer := Message{Status: "404", Message: "Energy drink with such ID does not exist"}
 		json.NewEncoder(w).Encode(answer)
 		return
 	}
 
-	existingEnergetic.Name = updatedEnergetic.Name
-	existingEnergetic.Taste = updatedEnergetic.Taste
-	existingEnergetic.Description = updatedEnergetic.Description
-	existingEnergetic.ManufacturerName = updatedEnergetic.ManufacturerName
-	existingEnergetic.ManufactureCountry = updatedEnergetic.ManufactureCountry
-	existingEnergetic.PictureURL = updatedEnergetic.PictureURL
+	existingEnergetic.Composition = updatedEnergetic.Composition
 
-	existingEnergetic.Composition.Caffeine = updatedEnergetic.Composition.Caffeine
-	existingEnergetic.Composition.Taurine = updatedEnergetic.Composition.Taurine
+	db.Session(&gorm.Session{FullSaveAssociations: true}).Model(&existingEnergetic).Updates(&updatedEnergetic)
 
-	db.Session(&gorm.Session{FullSaveAssociations: true}).Save(&existingEnergetic)
+	db.Preload("Composition").Find(&energeticsList)
 
 	w.WriteHeader(http.StatusOK)
 	answer := Message{Status: "200", Message: "Energy drink was updated"}
