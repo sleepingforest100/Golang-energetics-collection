@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
 
@@ -16,6 +17,10 @@ import (
 type Message struct {
 	Status  string `json:"status"`
 	Message string `json:"message"`
+}
+
+type pagesCount struct {
+	Pages int `json:"pages`
 }
 
 type Energetic struct {
@@ -43,6 +48,8 @@ type CompositionUniqueConstraint struct {
 var energeticsList []Energetic
 var db *gorm.DB
 
+var limit = 3
+
 func initDB() {
 	dsn := "host=localhost user=postgres password=222316pb dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	var err error
@@ -65,6 +72,7 @@ func main() {
 	router.HandleFunc("/energetix/{id}", getEnergeticsById).Methods("GET")
 	router.HandleFunc("/energetix/{id}", updateEnergeticsById).Methods("PUT")
 	router.HandleFunc("/energetix/{id}", deleteEnergeticById).Methods("DELETE")
+	router.HandleFunc("/pages", getNumberOfPages).Methods("GET")
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "gofront/index-go.html")
 	})
@@ -155,7 +163,6 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 	}
 
 	pageInt, errConv := strconv.Atoi(page)
-	limit := 3
 	offset := (pageInt - 1) * limit
 	print(offset)
 
@@ -287,4 +294,10 @@ func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
 	answer := Message{Status: "410", Message: "Energy drink was deleted successfully"}
 	json.NewEncoder(w).Encode(answer)
 	w.WriteHeader(http.StatusOK)
+}
+
+func getNumberOfPages(w http.ResponseWriter, r *http.Request) {
+	count := int(math.Ceil(float64(len(energeticsList)) / float64(limit)))
+	number := pagesCount{Pages: count}
+	json.NewEncoder(w).Encode(number)
 }
