@@ -2,9 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"log"
+	"fmt"
 	"math"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/gorilla/handlers"
@@ -12,6 +13,8 @@ import (
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"github.com/sirupsen/logrus"
 )
 
 type Message struct {
@@ -50,19 +53,44 @@ var db *gorm.DB
 
 var limit = 3
 
+var logFile = "log.json"
+
+func initLog() {
+	f, err := os.OpenFile(logFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		fmt.Println("Failed to create logfile" + logFile)
+		panic(err)
+	}
+	logrus.SetOutput(f)
+	logrus.SetFormatter(&logrus.JSONFormatter{})
+	logrus.WithFields(logrus.Fields{
+		"module":          "main",
+		"function":        "initLog",
+		"action":          "log file opening",
+		"logrusFormatter": "JSONformatter",
+		"logFile":         logFile,
+	}).Info("Log file was opened")
+}
+
 func initDB() {
 	dsn := "host=localhost user=postgres password=222316pb dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	var err error
-	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	if err != nil {
-		log.Fatal(err)
+	var errConn error
+	db, errConn = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	logrus.WithFields(logrus.Fields{
+		"module":           "main",
+		"function":         "initDB",
+		"action":           "db connection",
+		"connectionString": dsn,
+	}).Info("Attempt to connect to db")
+	if errConn != nil {
+		logrus.Fatal("Failed to connect to the db")
 	}
 
 	db.AutoMigrate(&Energetic{}, &Composition{})
 }
 
 func main() {
-
+	initLog()
 	initDB()
 	db.Preload("Composition").Find(&energeticsList)
 
@@ -190,12 +218,13 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	logrus.Info("Info message")
+
 	responseJSON, err := json.Marshal(energeticsList)
 	if err != nil {
 		http.Error(w, "Failed to marshal JSON", http.StatusInternalServerError)
 		return
 	}
-
 	w.Write(responseJSON)
 }
 

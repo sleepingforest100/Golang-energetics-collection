@@ -1,0 +1,5 @@
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-01-30T03:25:19+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-01-30T03:29:22+06:00"}
+{"action":"db connection","connectionString":"host=localhost user=postgres password=222316pb dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai","function":"initDB","level":"info","module":"main","msg":"Attempt to connect to db","time":"2024-01-30T03:29:22+06:00"}
+{"level":"info","msg":"Info message","time":"2024-01-30T03:32:42+06:00"}
+{"level":"info","msg":"Info message","time":"2024-01-30T03:32:52+06:00"}
