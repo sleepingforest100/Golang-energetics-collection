@@ -12,7 +12,8 @@ $(document).ready(function() {
         })
             .then(response => response.json())
             .then(data => {
-                items = data;
+                items = data.data;
+                totalPages = data.total_count;
                 loadItems(items);
                 if (totalPages!==null) {
                     updatePagination(totalPages);
