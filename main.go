@@ -59,15 +59,6 @@ func main() {
 	initDB()
 	db.Preload("Composition").Find(&energeticsList)
 
-	// createEnergetic(db, "Monster2", "Orange", "Wow", "Ho", "Hungry", "dfsfsfs", 32, 400)
-	// for _, energetics := range energeticsList {
-	// 	log.Printf("EnergeticsID: %d, Name: %s, Taste: %s, Description: %s, ManufacturerName: %s, ManufactureCountry: %s, Composition: %+v\n",
-	// 		energetics.EnergeticsID, energetics.Name, energetics.Taste, energetics.Description, energetics.ManufacturerName, energetics.ManufactureCountry, energetics.Composition)
-	// }
-	// var energetic1 Energetic
-	// db.Preload("Composition").First(&energetic1, 1)
-	// log.Println(energetic1)
-
 	router := mux.NewRouter()
 	router.HandleFunc("/energetix", getEnergetics).Methods("GET")
 	router.HandleFunc("/energetix", postEnergetic).Methods("POST")
@@ -127,7 +118,6 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 
 func getEnergeticsById(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	// log.Print(params)
 	var energetic1 Energetic
 
 	db.AutoMigrate(&Energetic{}, &Composition{})
@@ -166,9 +156,6 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// db.Session(&gorm.Session{FullSaveAssociations: true}).Model(&existingEnergetic).Updates(&updatedEnergetic)
-	// existingEnergetic.Composition.Caffeine = updatedEnergetic.Composition.Caffeine
-	// existingEnergetic.Composition.Taurine = updatedEnergetic.Composition.Taurine
 	existingEnergetic.Composition = updatedEnergetic.Composition
 
 	db.Session(&gorm.Session{FullSaveAssociations: true}).Model(&existingEnergetic).Updates(&updatedEnergetic)
