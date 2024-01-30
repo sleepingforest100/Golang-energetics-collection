@@ -101,12 +101,6 @@ func main() {
 	logrus.Info("Preload energetics collection")
 
 	router := mux.NewRouter()
-	// router.HandleFunc("/energetix", getEnergetics).Methods("GET")
-	// router.HandleFunc("/energetix", postEnergetic).Methods("POST")
-	// router.HandleFunc("/energetix/{id}", getEnergeticsById).Methods("GET")
-	// router.HandleFunc("/energetix/{id}", updateEnergeticsById).Methods("PUT")
-	// router.HandleFunc("/energetix/{id}", deleteEnergeticById).Methods("DELETE")
-	// router.HandleFunc("/pages", getNumberOfPages).Methods("GET")
 
 	router.Handle("/energetix", RateLimitMiddleware(http.HandlerFunc(getEnergetics))).Methods("GET")
 	router.Handle("/energetix", RateLimitMiddleware(http.HandlerFunc(postEnergetic))).Methods("POST")
@@ -115,27 +109,15 @@ func main() {
 	router.Handle("/energetix/{id}", RateLimitMiddleware(http.HandlerFunc(deleteEnergeticById))).Methods("DELETE")
 	router.Handle("/pages", RateLimitMiddleware(http.HandlerFunc(getNumberOfPages))).Methods("GET")
 
-	router.Handle("/", RateLimitMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "index-go.html", http.StatusSeeOther)
-	}))).Methods("GET")
-
-	router.Handle("/index-go.html", RateLimitMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	})
+	router.HandleFunc("/index-go.html", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "index-go.html")
-	}))).Methods("GET")
-
-	router.Handle("/form-go.html", RateLimitMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	})
+	router.HandleFunc("/form-go.html", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "form-go.html")
-	}))).Methods("GET")
-
-	// router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-	// 	http.Redirect(w, r, "index-go.html", http.StatusSeeOther)
-	// })
-	// router.HandleFunc("/index-go.html", func(w http.ResponseWriter, r *http.Request) {
-	// 	http.ServeFile(w, r, "index-go.html")
-	// })
-	// router.HandleFunc("/form-go.html", func(w http.ResponseWriter, r *http.Request) {
-	// 	http.ServeFile(w, r, "form-go.html")
-	// })
+	})
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
