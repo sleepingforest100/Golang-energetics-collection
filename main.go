@@ -21,6 +21,7 @@ import (
 type Message struct {
 	Status  string `json:"status"`
 	Message string `json:"message"`
+	Limit   string `json:"limit"`
 }
 
 type pagesCount struct {
@@ -56,7 +57,7 @@ var limit = 3
 
 var logFile = "log.json"
 
-var limiter = rate.NewLimiter(1, 3)
+var limiter = rate.NewLimiter(10, 10)
 
 func initLog() {
 	f, err := os.OpenFile(logFile, os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
@@ -100,22 +101,41 @@ func main() {
 	logrus.Info("Preload energetics collection")
 
 	router := mux.NewRouter()
-	router.HandleFunc("/energetix", getEnergetics).Methods("GET")
-	router.HandleFunc("/energetix", postEnergetic).Methods("POST")
-	router.HandleFunc("/energetix/{id}", getEnergeticsById).Methods("GET")
-	router.HandleFunc("/energetix/{id}", updateEnergeticsById).Methods("PUT")
-	router.HandleFunc("/energetix/{id}", deleteEnergeticById).Methods("DELETE")
-	router.HandleFunc("/pages", getNumberOfPages).Methods("GET")
+	// router.HandleFunc("/energetix", getEnergetics).Methods("GET")
+	// router.HandleFunc("/energetix", postEnergetic).Methods("POST")
+	// router.HandleFunc("/energetix/{id}", getEnergeticsById).Methods("GET")
+	// router.HandleFunc("/energetix/{id}", updateEnergeticsById).Methods("PUT")
+	// router.HandleFunc("/energetix/{id}", deleteEnergeticById).Methods("DELETE")
+	// router.HandleFunc("/pages", getNumberOfPages).Methods("GET")
 
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	router.Handle("/energetix", RateLimitMiddleware(http.HandlerFunc(getEnergetics))).Methods("GET")
+	router.Handle("/energetix", RateLimitMiddleware(http.HandlerFunc(postEnergetic))).Methods("POST")
+	router.Handle("/energetix/{id}", RateLimitMiddleware(http.HandlerFunc(getEnergeticsById))).Methods("GET")
+	router.Handle("/energetix/{id}", RateLimitMiddleware(http.HandlerFunc(updateEnergeticsById))).Methods("PUT")
+	router.Handle("/energetix/{id}", RateLimitMiddleware(http.HandlerFunc(deleteEnergeticById))).Methods("DELETE")
+	router.Handle("/pages", RateLimitMiddleware(http.HandlerFunc(getNumberOfPages))).Methods("GET")
+
+	router.Handle("/", RateLimitMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "index-go.html", http.StatusSeeOther)
-	})
-	router.HandleFunc("/index-go.html", func(w http.ResponseWriter, r *http.Request) {
+	}))).Methods("GET")
+
+	router.Handle("/index-go.html", RateLimitMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "index-go.html")
-	})
-	router.HandleFunc("/form-go.html", func(w http.ResponseWriter, r *http.Request) {
+	}))).Methods("GET")
+
+	router.Handle("/form-go.html", RateLimitMiddleware(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "form-go.html")
-	})
+	}))).Methods("GET")
+
+	// router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	// 	http.Redirect(w, r, "index-go.html", http.StatusSeeOther)
+	// })
+	// router.HandleFunc("/index-go.html", func(w http.ResponseWriter, r *http.Request) {
+	// 	http.ServeFile(w, r, "index-go.html")
+	// })
+	// router.HandleFunc("/form-go.html", func(w http.ResponseWriter, r *http.Request) {
+	// 	http.ServeFile(w, r, "form-go.html")
+	// })
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
@@ -137,7 +157,35 @@ func main() {
 	}
 }
 
+func RateLimitMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !limiter.Allow() {
+			message := Message{
+				Status:  "Request Failed",
+				Message: "Too many requests in one time. Try again a bit later",
+				Limit:   "2 request per second with a burst of 3 requests",
+			}
+			w.WriteHeader(http.StatusTooManyRequests)
+			json.NewEncoder(w).Encode(&message)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
+}
+
 func getEnergetics(w http.ResponseWriter, r *http.Request) {
+
+	if !limiter.Allow() {
+		message := Message{
+			Status:  "Request Failed",
+			Message: "Too many requests in one time. Try again a bit later",
+			Limit:   "1 request per second with a burst of 3 requests",
+		}
+		w.WriteHeader(http.StatusTooManyRequests)
+		json.NewEncoder(w).Encode(&message)
+		return
+	}
+
 	db.AutoMigrate(&Energetic{}, &Composition{})
 	logrus.Info("Automigration for energetics and compositions")
 
@@ -246,6 +294,24 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 		"offset":   offset,
 	}).Info("Computing offset")
 
+	var totalCount int64
+
+	erro := db.
+		Model(&Energetic{}).
+		Joins("Composition").
+		Order(sort+" "+order).
+		Where("name ILIKE ? AND taste ILIKE ? AND taurine >= ? AND taurine <= ? AND caffeine >= ? AND caffeine <= ? AND manufacturer_name ILIKE ? AND manufacture_country ILIKE ?",
+			"%"+nameEn+"%", "%"+taste+"%", taurine_gte, taurine_lte, caffeine_gte, caffeine_lte,
+			"%"+manufacturerName+"%", "%"+manufacturerCountry+"%").
+		Count(&totalCount).
+		Error
+
+	if erro != nil {
+		http.Error(w, "Failed to marshal JSON with sorting (counting)", http.StatusInternalServerError)
+		logrus.Error("Couldn't execute query")
+		return
+	}
+
 	err := db.
 		Model(&Energetic{}).
 		Joins("Composition").
@@ -288,17 +354,39 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 
 	}
 
-	responseJSON, err := json.Marshal(energeticsList)
+	totalCount = int64(math.Ceil(float64(totalCount) / float64(limit)))
+	response := struct {
+		TotalCount int64       `json:"total_count" `
+		Data       []Energetic `json:"data"`
+	}{
+		TotalCount: totalCount,
+		Data:       energeticsList,
+	}
+
+	responseJSON, err := json.Marshal(response)
 	logrus.Info("Sending energetics list json as a response")
 	if err != nil {
 		http.Error(w, "Failed to marshal JSON", http.StatusInternalServerError)
 		logrus.Error("Couldn't marshal JSON")
 		return
 	}
+
 	w.Write(responseJSON)
 }
 
 func getEnergeticsById(w http.ResponseWriter, r *http.Request) {
+
+	if !limiter.Allow() {
+		message := Message{
+			Status:  "Request Failed",
+			Message: "Too many requests in one time. Try again a bit later",
+			Limit:   "1 request per second with a burst of 3 requests",
+		}
+		w.WriteHeader(http.StatusTooManyRequests)
+		json.NewEncoder(w).Encode(&message)
+		return
+	}
+
 	params := mux.Vars(r)
 	var energetic1 Energetic
 	db.AutoMigrate(&Energetic{}, &Composition{})
@@ -321,6 +409,18 @@ func getEnergeticsById(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
+
+	if !limiter.Allow() {
+		message := Message{
+			Status:  "Request Failed",
+			Message: "Too many requests in one time. Try again a bit later",
+			Limit:   "1 request per second with a burst of 3 requests",
+		}
+		w.WriteHeader(http.StatusTooManyRequests)
+		json.NewEncoder(w).Encode(&message)
+		return
+	}
+
 	logrus.WithFields(logrus.Fields{
 		"function": "updateEnergeticsById",
 		"action":   "launching of updating 1 energetic by id",
@@ -409,6 +509,18 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 }
 
 func postEnergetic(w http.ResponseWriter, r *http.Request) {
+
+	if !limiter.Allow() {
+		message := Message{
+			Status:  "Request Failed",
+			Message: "Too many requests in one time. Try again a bit later",
+			Limit:   "1 request per second with a burst of 3 requests",
+		}
+		w.WriteHeader(http.StatusTooManyRequests)
+		json.NewEncoder(w).Encode(&message)
+		return
+	}
+
 	var newEnergetic Energetic
 
 	logrus.WithFields(logrus.Fields{
@@ -450,6 +562,17 @@ func postEnergetic(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
+
+	if !limiter.Allow() {
+		message := Message{
+			Status:  "Request Failed",
+			Message: "Too many requests in one time. Try again a bit later",
+			Limit:   "1 request per second with a burst of 3 requests",
+		}
+		w.WriteHeader(http.StatusTooManyRequests)
+		json.NewEncoder(w).Encode(&message)
+		return
+	}
 
 	logrus.WithFields(logrus.Fields{
 		"function": "deleteEnergeticById",
@@ -493,6 +616,18 @@ func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
 }
 
 func getNumberOfPages(w http.ResponseWriter, r *http.Request) {
+
+	if !limiter.Allow() {
+		message := Message{
+			Status:  "Request Failed",
+			Message: "Too many requests in one time. Try again a bit later",
+			Limit:   "1 request per second with a burst of 3 requests",
+		}
+		w.WriteHeader(http.StatusTooManyRequests)
+		json.NewEncoder(w).Encode(&message)
+		return
+	}
+
 	db.Find(&energeticsList)
 	count := int(math.Ceil(float64(len(energeticsList)) / float64(limit)))
 	number := pagesCount{Pages: count}
