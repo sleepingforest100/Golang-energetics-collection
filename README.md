@@ -37,7 +37,7 @@ LAUNCH INSTRUCTIONS:
         go get -u github.com/sirupsen/logrus
   6. Change the password and user for db connection with yours in the function initDB(). It's very important!
   7. Launch the application, write "go run main.go" in the terminal. Agree with your FireWall if it's neccessary.
-  8. In our current version, html page works only if launched on localhost via IntelliJ IDEA, we need to create a new HTML Bootstrap project and copy all 'gofront' folder contents into the new project. jQuery is required, check if External Libraries has it, if not - hover over a jquery link that can be found in the top of a index-go.html file. If a message with a text allowing to Download Library pops up - click on it and download. If jQuery already installed you need to include it manually via File > Project Structure > Global Libraries > Right click on jQuery > Add to Modules > Apply. Then just run index-go.html using IDEA's regular application launch button (green arrow in the top right).
+  8. Open "http://localhost:8080/index-go.html" in your browser.
   9. Scroll page a bit lower and click on "Moderation" to the right side of the page. There you can see options to create and to find by id.
   10. For updating and deleting you can click on the energetics cards.
      ![screenshot2](https://github.com/PollyBreak/Golang-energetics-collection/assets/88556120/6c63c443-c7aa-4427-a9f5-264b5235ecdf)
