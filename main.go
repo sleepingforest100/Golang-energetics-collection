@@ -77,7 +77,7 @@ func initLog() {
 }
 
 func initDB() {
-	dsn := "host=localhost user=postgres password=222316pb dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+	dsn := "host=localhost user=postgres password=pgadmin4 dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 	var errConn error
 	db, errConn = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	logrus.WithFields(logrus.Fields{
