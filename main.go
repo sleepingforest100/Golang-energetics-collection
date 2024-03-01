@@ -141,11 +141,13 @@ func main() {
 
 func RateLimitMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Print("Limiter heeree")
+		fmt.Print(limiter)
 		if !limiter.Allow() {
 			message := Message{
 				Status:  "Request Failed",
 				Message: "Too many requests in one time. Try again a bit later",
-				Limit:   "2 request per second with a burst of 3 requests",
+				Limit:   "10 request per second with a burst of 10 requests",
 			}
 			w.WriteHeader(http.StatusTooManyRequests)
 			json.NewEncoder(w).Encode(&message)
@@ -156,17 +158,6 @@ func RateLimitMiddleware(next http.Handler) http.Handler {
 }
 
 func getEnergetics(w http.ResponseWriter, r *http.Request) {
-
-	if !limiter.Allow() {
-		message := Message{
-			Status:  "Request Failed",
-			Message: "Too many requests in one time. Try again a bit later",
-			Limit:   "1 request per second with a burst of 3 requests",
-		}
-		w.WriteHeader(http.StatusTooManyRequests)
-		json.NewEncoder(w).Encode(&message)
-		return
-	}
 
 	db.AutoMigrate(&Energetic{}, &Composition{})
 	logrus.Info("Automigration for energetics and compositions")
@@ -358,17 +349,6 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 
 func getEnergeticsById(w http.ResponseWriter, r *http.Request) {
 
-	if !limiter.Allow() {
-		message := Message{
-			Status:  "Request Failed",
-			Message: "Too many requests in one time. Try again a bit later",
-			Limit:   "1 request per second with a burst of 3 requests",
-		}
-		w.WriteHeader(http.StatusTooManyRequests)
-		json.NewEncoder(w).Encode(&message)
-		return
-	}
-
 	params := mux.Vars(r)
 	var energetic1 Energetic
 	db.AutoMigrate(&Energetic{}, &Composition{})
@@ -391,17 +371,6 @@ func getEnergeticsById(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
-
-	if !limiter.Allow() {
-		message := Message{
-			Status:  "Request Failed",
-			Message: "Too many requests in one time. Try again a bit later",
-			Limit:   "1 request per second with a burst of 3 requests",
-		}
-		w.WriteHeader(http.StatusTooManyRequests)
-		json.NewEncoder(w).Encode(&message)
-		return
-	}
 
 	logrus.WithFields(logrus.Fields{
 		"function": "updateEnergeticsById",
@@ -492,17 +461,6 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 
 func postEnergetic(w http.ResponseWriter, r *http.Request) {
 
-	if !limiter.Allow() {
-		message := Message{
-			Status:  "Request Failed",
-			Message: "Too many requests in one time. Try again a bit later",
-			Limit:   "1 request per second with a burst of 3 requests",
-		}
-		w.WriteHeader(http.StatusTooManyRequests)
-		json.NewEncoder(w).Encode(&message)
-		return
-	}
-
 	var newEnergetic Energetic
 
 	logrus.WithFields(logrus.Fields{
@@ -544,17 +502,6 @@ func postEnergetic(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
-
-	if !limiter.Allow() {
-		message := Message{
-			Status:  "Request Failed",
-			Message: "Too many requests in one time. Try again a bit later",
-			Limit:   "1 request per second with a burst of 3 requests",
-		}
-		w.WriteHeader(http.StatusTooManyRequests)
-		json.NewEncoder(w).Encode(&message)
-		return
-	}
 
 	logrus.WithFields(logrus.Fields{
 		"function": "deleteEnergeticById",
@@ -598,17 +545,6 @@ func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
 }
 
 func getNumberOfPages(w http.ResponseWriter, r *http.Request) {
-
-	if !limiter.Allow() {
-		message := Message{
-			Status:  "Request Failed",
-			Message: "Too many requests in one time. Try again a bit later",
-			Limit:   "1 request per second with a burst of 3 requests",
-		}
-		w.WriteHeader(http.StatusTooManyRequests)
-		json.NewEncoder(w).Encode(&message)
-		return
-	}
 
 	db.Find(&energeticsList)
 	count := int(math.Ceil(float64(len(energeticsList)) / float64(limit)))
