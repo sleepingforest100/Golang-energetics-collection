@@ -123,6 +123,10 @@ func main() {
 	router.Handle("/confirm", http.HandlerFunc(controllers.ConfirmEmail)).Methods("GET")
 	router.Handle("/auth/reset", http.HandlerFunc(controllers.ResetPassword)).Methods("POST")
 
+	router.Handle("/users", http.HandlerFunc(controllers.GetUsers)).Methods("GET")
+	router.Handle("/user", http.HandlerFunc(controllers.GetUserInfo)).Methods("GET")
+	router.Handle("/user", http.HandlerFunc(controllers.UpdateUser)).Methods("POST")
+
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "index-go.html", http.StatusSeeOther)
 	})
