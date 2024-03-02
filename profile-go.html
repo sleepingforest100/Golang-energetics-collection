@@ -85,11 +85,23 @@
           <a href="index-go.html" class="nav-item nav-link active">Home</a>
         </div>
         <div class="navbar-nav ms-auto">
-          <a href="#" class="nav-item nav-link">Logout</a>
+          <a href="#" class="nav-item nav-link" id="nav-logout">Logout</a>
         </div>
       </div>
     </div>
   </nav>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const logoutLink = document.getElementById('nav-logout');
+      logoutLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        document.cookie = 'jwtToken=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;';
+        window.location.reload();
+      });
+    });
+  </script>
+
+
 
   <div id="profile-info" class="my-5 p-3 mx-5">
 

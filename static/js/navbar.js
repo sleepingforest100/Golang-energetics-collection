@@ -8,6 +8,12 @@ function checkUserRole() {
     const navAdmin = document.getElementById('nav-admin');
     const navLogout = document.getElementById('nav-logout');
 
+    navLogout.addEventListener('click', function(event) {
+        event.preventDefault();
+        document.cookie = 'jwtToken=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;';
+        window.location.reload();
+    });
+
     if (auth('admin')) {
         navProfile.classList.remove('hidden');
         navAdmin.classList.remove('hidden');
