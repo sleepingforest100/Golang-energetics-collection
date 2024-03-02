@@ -15,7 +15,6 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 )
@@ -100,12 +99,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	expirationTime := time.Now().Add(5 * time.Minute)
+	expirationTime := time.Now().Add(60 * time.Minute)
 
 	claims := &models.Claims{
-		Role: existingUser.Role,
+		Role:  existingUser.Role,
+		Email: existingUser.Email,
 		StandardClaims: jwt.StandardClaims{
-			Subject:   existingUser.Email,
 			ExpiresAt: expirationTime.Unix(),
 		},
 	}
@@ -207,12 +206,46 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
-func ResetPassword(c *gin.Context) {
+func ResetPassword(w http.ResponseWriter, r *http.Request) {
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		answer := Message{Status: "400", Message: "No Authorization header provided"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	claims, err := utils.ParseToken(token)
+
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		answer := Message{Status: "401", Message: "unauthorized"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+
+	if claims.Role != "user" && claims.Role != "admin" {
+		w.WriteHeader(http.StatusUnauthorized)
+		answer := Message{Status: "401", Message: "unauthorized"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
 
 	var user models.User
 
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(400, gin.H{"error": err.Error()})
+	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		answer := Message{Status: "400", Message: "Incorrect input"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+
+	if claims.Email != user.Email {
+		w.WriteHeader(http.StatusUnauthorized)
+		answer := Message{Status: "401", Message: "unauthorized"}
+		json.NewEncoder(w).Encode(answer)
 		return
 	}
 
@@ -221,7 +254,9 @@ func ResetPassword(c *gin.Context) {
 	models.DB.Where("email = ?", user.Email).First(&existingUser)
 
 	if existingUser.ID == 0 {
-		c.JSON(400, gin.H{"error": "user does not exist"})
+		w.WriteHeader(http.StatusBadRequest)
+		answer := Message{Status: "400", Message: "There is no such user"}
+		json.NewEncoder(w).Encode(answer)
 		return
 	}
 
@@ -229,13 +264,17 @@ func ResetPassword(c *gin.Context) {
 	user.Password, errHash = utils.GenerateHashPassword(user.Password)
 
 	if errHash != nil {
-		c.JSON(500, gin.H{"error": "could not generate password hash"})
+		w.WriteHeader(http.StatusInternalServerError)
+		answer := Message{Status: "500", Message: "could not generate password hash"}
+		json.NewEncoder(w).Encode(answer)
 		return
 	}
 
 	models.DB.Model(&existingUser).Update("password", user.Password)
 
-	c.JSON(200, gin.H{"success": "password updated"})
+	w.WriteHeader(http.StatusOK)
+	answer := Message{Status: "200", Message: "Password updated"}
+	json.NewEncoder(w).Encode(answer)
 }
 
 func ConfirmEmail(w http.ResponseWriter, r *http.Request) {

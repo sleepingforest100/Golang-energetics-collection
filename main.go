@@ -121,7 +121,7 @@ func main() {
 	router.Handle("/auth/signup", http.HandlerFunc(controllers.Signup)).Methods("POST")
 	router.Handle("/home", http.HandlerFunc(controllers.Home)).Methods("GET")
 	router.Handle("/confirm", http.HandlerFunc(controllers.ConfirmEmail)).Methods("GET")
-	// router.Handle("/auth/reset", http.HandlerFunc(controllers.ResetPassword)).Methods("POST")
+	router.Handle("/auth/reset", http.HandlerFunc(controllers.ResetPassword)).Methods("POST")
 
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "index-go.html", http.StatusSeeOther)
