@@ -2326,3 +2326,124 @@
 {"function":"getEnergetics","level":"info","msg":"Computing offset","offset":0,"time":"2024-02-13T17:57:32+06:00"}
 {"action":"search energetics in db using filters, sorting and pages","filters":{"caffeine_gte":"0","caffeine_lte":"500000","energeticName":"","manufacturerCountry":"","manufacturerName":"","taste":"","taurine_gte":"0","taurine_lte":"500000"},"function":"getEnergetics","level":"info","msg":"DB.FIND()","pagination":{"limit":3,"offset":0,"page":1},"sorting":{"order":"desc","sort":"energetics_id"},"time":"2024-02-13T17:57:32+06:00"}
 {"level":"info","msg":"Sending energetics list json as a response","time":"2024-02-13T17:57:32+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-13T18:22:26+06:00"}
+{"action":"db connection","connectionString":":@tcp(:)/?charset=utf8\u0026parseTime=True\u0026loc=Local","function":"initDB","level":"info","module":"main","msg":"Attempt to connect to db","time":"2024-02-13T18:22:27+06:00"}
+{"level":"fatal","msg":"Failed to connect to the db","time":"2024-02-13T18:22:27+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-13T18:23:04+06:00"}
+{"action":"db connection","connectionString":":@tcp(:)/?charset=utf8\u0026parseTime=True\u0026loc=Local","function":"initDB","level":"info","module":"main","msg":"Attempt to connect to db","time":"2024-02-13T18:23:05+06:00"}
+{"level":"fatal","msg":"Failed to connect to the db","time":"2024-02-13T18:23:05+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-13T18:24:45+06:00"}
+{"action":"db connection","connectionString":":@tcp(:)/?charset=utf8\u0026parseTime=True\u0026loc=Local","function":"initDB","level":"info","module":"main","msg":"Attempt to connect to db","time":"2024-02-13T18:24:46+06:00"}
+{"level":"fatal","msg":"Failed to connect to the db","time":"2024-02-13T18:24:46+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-13T18:25:55+06:00"}
+{"action":"db connection","connectionString":":@tcp(:)/?charset=utf8\u0026parseTime=True\u0026loc=Local","function":"initDB","level":"info","module":"main","msg":"Attempt to connect to db","time":"2024-02-13T18:25:56+06:00"}
+{"level":"fatal","msg":"Failed to connect to the db","time":"2024-02-13T18:25:56+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-13T18:31:08+06:00"}
+{"action":"db connection","connectionString":"postgres:222316pb@tcp(localhost:5432)/energetix?charset=utf8\u0026parseTime=True\u0026loc=Local","function":"initDB","level":"info","module":"main","msg":"Attempt to connect to db","time":"2024-02-13T18:31:08+06:00"}
+{"level":"fatal","msg":"Failed to connect to the db","time":"2024-02-13T18:31:08+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-13T18:31:39+06:00"}
+{"action":"db connection","connectionString":"postgres:222316pb@tcp(localhost:5432)/energetix?charset=utf8\u0026parseTime=True\u0026loc=Local","function":"initDB","level":"info","module":"main","msg":"Attempt to connect to db","time":"2024-02-13T18:31:39+06:00"}
+{"level":"fatal","msg":"Failed to connect to the db","time":"2024-02-13T18:31:39+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-13T18:33:41+06:00"}
+{"action":"db connection","connectionString":"host=postgres user=222316pb password=localhost dbname=5432 port=energetix sslmode=disable TimeZone=Asia/Shanghai","function":"initDB","level":"info","module":"main","msg":"Attempt to connect to db","time":"2024-02-13T18:33:41+06:00"}
+{"level":"fatal","msg":"Failed to connect to the db","time":"2024-02-13T18:33:41+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-13T18:36:02+06:00"}
+{"action":"db connection","connectionString":"host=postgres user=222316pb password=localhost dbname=5432 port=energetix sslmode=disable TimeZone=Asia/Shanghai","function":"initDB","level":"info","module":"main","msg":"Attempt to connect to db","time":"2024-02-13T18:36:02+06:00"}
+{"level":"fatal","msg":"Failed to connect to the db","time":"2024-02-13T18:36:02+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-13T18:37:18+06:00"}
+{"action":"db connection","connectionString":"host=localhost user=postgres password=222316pb dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai","function":"initDB","level":"info","module":"main","msg":"Attempt to connect to db","time":"2024-02-13T18:37:19+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-13T18:37:19+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-02-13T18:37:19+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T03:57:43+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T04:00:44+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T04:01:00+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T04:01:02+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T04:03:24+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T04:03:25+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T04:03:40+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T04:03:41+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T04:08:29+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T04:08:31+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-02-29T04:08:31+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T04:09:48+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T04:09:49+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-02-29T04:09:49+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T13:32:24+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T13:32:25+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-02-29T13:32:25+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T13:35:58+06:00"}
+{"action":"query reading","function":"getEnergetics","level":"info","module":"main","msg":"Initializating of parametrs from the query","queryParams":{"caffeine_gte":"","caffeine_lte":"","energeticName":"","manufacturerCountry":"","manufacturerName":"","order":"","sort":"","taste":"","taurine_gte":"","taurine_lte":""},"time":"2024-02-29T13:35:58+06:00"}
+{"action":"query params updating","function":"getEnergetics","level":"info","module":"main","msg":"Fixing parametrs from the query","queryParams":{"caffeine_gte":"0","caffeine_lte":"500000","energeticName":"","manufacturerCountry":"","manufacturerName":"","order":"desc","sort":"energetics_id","taste":"","taurine_gte":"0","taurine_lte":"500000"},"time":"2024-02-29T13:35:58+06:00"}
+{"action":"converting str  to int","function":"getEnergetics","level":"info","msg":"Attempt to convert param 'page' to int","page":"1","pageInt":1,"time":"2024-02-29T13:35:58+06:00"}
+{"function":"getEnergetics","level":"info","msg":"Computing offset","offset":0,"time":"2024-02-29T13:35:58+06:00"}
+{"action":"search energetics in db using filters, sorting and pages","filters":{"caffeine_gte":"0","caffeine_lte":"500000","energeticName":"","manufacturerCountry":"","manufacturerName":"","taste":"","taurine_gte":"0","taurine_lte":"500000"},"function":"getEnergetics","level":"info","msg":"DB.FIND()","pagination":{"limit":3,"offset":0,"page":1},"sorting":{"order":"desc","sort":"energetics_id"},"time":"2024-02-29T13:35:58+06:00"}
+{"level":"info","msg":"Sending energetics list json as a response","time":"2024-02-29T13:35:58+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T13:44:44+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T13:44:45+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-02-29T13:44:45+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T22:33:48+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T22:33:50+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T22:37:39+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T22:37:41+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T22:38:18+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T22:38:18+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-02-29T22:38:19+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T22:39:22+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T22:39:22+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T22:39:53+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T22:39:54+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T22:41:40+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T22:41:41+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T22:50:24+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T22:50:26+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T22:51:43+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T22:51:43+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-02-29T22:51:43+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T22:52:58+06:00"}
+{"action":"query reading","function":"getEnergetics","level":"info","module":"main","msg":"Initializating of parametrs from the query","queryParams":{"caffeine_gte":"","caffeine_lte":"","energeticName":"","manufacturerCountry":"","manufacturerName":"","order":"","sort":"","taste":"","taurine_gte":"","taurine_lte":""},"time":"2024-02-29T22:52:58+06:00"}
+{"action":"query params updating","function":"getEnergetics","level":"info","module":"main","msg":"Fixing parametrs from the query","queryParams":{"caffeine_gte":"0","caffeine_lte":"500000","energeticName":"","manufacturerCountry":"","manufacturerName":"","order":"desc","sort":"energetics_id","taste":"","taurine_gte":"0","taurine_lte":"500000"},"time":"2024-02-29T22:52:58+06:00"}
+{"action":"converting str  to int","function":"getEnergetics","level":"info","msg":"Attempt to convert param 'page' to int","page":"1","pageInt":1,"time":"2024-02-29T22:52:58+06:00"}
+{"function":"getEnergetics","level":"info","msg":"Computing offset","offset":0,"time":"2024-02-29T22:52:58+06:00"}
+{"action":"search energetics in db using filters, sorting and pages","filters":{"caffeine_gte":"0","caffeine_lte":"500000","energeticName":"","manufacturerCountry":"","manufacturerName":"","taste":"","taurine_gte":"0","taurine_lte":"500000"},"function":"getEnergetics","level":"info","msg":"DB.FIND()","pagination":{"limit":3,"offset":0,"page":1},"sorting":{"order":"desc","sort":"energetics_id"},"time":"2024-02-29T22:52:58+06:00"}
+{"level":"info","msg":"Sending energetics list json as a response","time":"2024-02-29T22:52:58+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-02-29T22:59:10+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-02-29T22:59:10+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-02-29T22:59:10+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-01T00:07:08+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-01T00:07:09+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-01T00:07:09+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-01T00:09:58+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-01T00:09:58+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-01T00:09:58+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-01T00:19:02+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-01T00:19:02+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-01T00:19:02+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-01T00:22:00+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-01T00:22:01+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-01T00:22:01+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-01T00:25:21+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-01T00:25:21+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-01T00:25:21+06:00"}
+{"action":"servers starts","function":"main","level":"info","module":"main","msg":"Server launches","port":"8080","time":"2024-03-01T00:25:21+06:00"}
+{"level":"panic","msg":"Server did not run","time":"2024-03-01T00:25:21+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-01T00:27:20+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-01T00:27:21+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-01T00:27:21+06:00"}
+{"action":"servers starts","function":"main","level":"info","module":"main","msg":"Server launches","port":"8080","time":"2024-03-01T00:27:21+06:00"}
+{"level":"panic","msg":"Server did not run","time":"2024-03-01T00:27:21+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-01T00:28:15+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-01T00:28:16+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-01T00:28:18+06:00"}
+{"action":"servers starts","function":"main","level":"info","module":"main","msg":"Server launches","port":"8080","time":"2024-03-01T00:28:18+06:00"}
+{"level":"panic","msg":"Server did not run","time":"2024-03-01T00:28:18+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-01T00:28:51+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-01T00:28:52+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-01T00:28:52+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-01T00:39:00+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-01T00:39:00+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-01T00:39:00+06:00"}
+{"action":"servers starts","function":"main","level":"info","module":"main","msg":"Server launches","port":"8080","time":"2024-03-01T00:39:00+06:00"}
+{"level":"panic","msg":"Server did not run","time":"2024-03-01T00:39:00+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-01T00:39:12+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-01T00:39:12+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-01T00:39:12+06:00"}
