@@ -26,12 +26,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .then(data => {
                     document.getElementById('profile-info').innerHTML = `
-                <div>Username: ${data.username}</div>
+                <div>Username: ${data.name}</div>
                 <div>Email: ${data.email}</div>
                 <div>Address: ${data.address}</div>
             `;
-                    document.getElementById('edname').value = data.username;
-                    document.getElementById('edemail').value = data.email;
+                    document.getElementById('edname').value = data.name;
+                    //document.getElementById('edemail').value = data.email;
                     document.getElementById('edaddress').value = data.address;
                 })
                 .catch(error => console.error('Error fetching user data:', error));
@@ -47,10 +47,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
             const formData = {
-                username: document.getElementById('edname').value,
-                email: document.getElementById('edemail').value,
+                name: document.getElementById('edname').value,
+                // email: document.getElementById('edemail').value,
                 address: document.getElementById('edaddress').value,
             };
+
 
             fetch('http://localhost:8080/user', {
                 method: 'PUT',
@@ -63,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(response => {
                     if (response.ok) {
                         console.log('User data updated successfully');
+                        $('#profileEditModal').modal('hide');
                         fetchUserData();
                     } else {
                         throw new Error('Failed to update user data');
@@ -79,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             const formData = {
                 oldpassword: document.getElementById('oldpass').value,
-                newpassword: document.getElementById('newpass').value
+                password: document.getElementById('newpass').value
             };
 
             fetch('http://localhost:8080/auth/reset', {
@@ -93,7 +95,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(response => {
                     if (response.ok) {
                         console.log('User data updated successfully');
-                        alert('You\'ve successfully changed your password!')
+                        alert('You\'ve successfully changed your password!');
+                        $('#changePassModal').modal('hide');
+                        document.getElementById('oldpass').value ='';
+                        document.getElementById('newpass').value ='';
                     } else {
                         throw new Error('Failed to update user data');
                     }

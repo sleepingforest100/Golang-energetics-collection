@@ -32,7 +32,7 @@
   </nav>
 
   <div class="text-center my-2 mt-5">
-    <a href="form-go.html" class="dropdown-item bg-primary w-25 m-auto rounded-pill">Create new entry for the store</a>
+    <a href="form-go.html" class="dropdown-item bg-primary w-25 m-auto rounded-pill text-light">Create new entry for the store</a>
   </div>
 
   <div class="scrollable-table">
@@ -52,14 +52,15 @@
     </table>
   </div>
 
-  <form id="mailForm">
+  <form id="mailForm" class="mx-auto text-center text-light">
+    <h3>Send email notification to every user</h3>
     <label for="mailHeader">Mail Header:</label><br>
     <input type="text" id="mailHeader" name="mailHeader"><br><br>
 
     <label for="mailBody">Mail Body:</label><br>
     <textarea id="mailBody" name="mailBody" rows="8" cols="50"></textarea><br><br>
 
-    <button type="submit">Send Mail</button>
+    <button type="submit" class="btn btn-secondary">Send Mail</button>
   </form>
 
 

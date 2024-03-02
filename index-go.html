@@ -120,7 +120,7 @@
           <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Search</a>
             <div class="dropdown-menu disabled">
-              <form>
+              <form id="searchForm">
                 <input type="number" class="dropdown-item form-control mx-1 border-3 border border-warning-subtle" placeholder="Search by ID" style="width:90%" id="search" required>
               </form>
             </div>
@@ -240,7 +240,7 @@
   </script>
   <script>
     $(document).ready(function () {
-      $('form').submit(function (event) {
+      $('#searchForm').submit(function (event) {
         event.preventDefault();
         search();
       });

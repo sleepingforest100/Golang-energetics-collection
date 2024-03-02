@@ -128,6 +128,8 @@ func main() {
 	router.Handle("/users", http.HandlerFunc(controllers.GetUsers)).Methods("GET")
 	router.Handle("/user", http.HandlerFunc(controllers.GetUserInfo)).Methods("GET")
 	router.Handle("/user", http.HandlerFunc(controllers.UpdateUser)).Methods("PUT")
+	router.Handle("/user-role/{id}", http.HandlerFunc(controllers.ChangeRole)).Methods("PUT")
+	router.Handle("/email", http.HandlerFunc(controllers.SendEmail)).Methods("POST")
 
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "index-go.html", http.StatusSeeOther)
@@ -137,6 +139,12 @@ func main() {
 	})
 	router.HandleFunc("/form-go.html", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "form-go.html")
+	})
+	router.HandleFunc("/profile-go.html", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "profile-go.html")
+	})
+	router.HandleFunc("/admin-go.html", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "admin-go.html")
 	})
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))

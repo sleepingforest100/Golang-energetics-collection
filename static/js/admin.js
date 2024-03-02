@@ -28,7 +28,7 @@ function fetchUserData() {
             data.forEach(item => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-            <td>${item.id}</td>
+            <td>${item.ID}</td>
             <td>${item.name}</td>
             <td>${item.email}</td>
             <td>${item.address}</td>
@@ -42,7 +42,7 @@ function fetchUserData() {
                 const selectBox = row.querySelector('.roleSelect');
                 selectBox.addEventListener('change', function() {
                     const selectedRole = this.value;
-                    const userId = item.id;
+                    const userId = item.ID;
                     fetch('/your-server-endpoint', {
                         method: 'POST',
                         headers: {
@@ -88,8 +88,8 @@ function sendMailInit () {
         const mailBody = document.getElementById('mailBody').value;
 
         const mailData = {
-            mailHeader: mailHeader,
-            mailBody: mailBody
+            subject: mailHeader,
+            body: mailBody
         };
 
         fetch('#', {
