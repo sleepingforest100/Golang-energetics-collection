@@ -17,6 +17,8 @@ import (
 	"github.com/sirupsen/logrus"
 	"golang.org/x/time/rate"
 
+	"syreclabs.com/go/faker"
+
 	"github.com/joho/godotenv"
 
 	"github.com/Golang-energetics-collection/controllers"
@@ -58,7 +60,7 @@ type CompositionUniqueConstraint struct {
 
 var energeticsList []Energetic
 
-var limit = 3
+var limit = 9
 
 var logFile = "log.json"
 
@@ -107,6 +109,8 @@ func main() {
 	initLog()
 	initDB()
 
+	generateUsers()
+
 	models.DB.Preload("Composition").Find(&energeticsList)
 	logrus.Info("Preload energetics collection")
 
@@ -121,7 +125,6 @@ func main() {
 
 	router.Handle("/auth/login", http.HandlerFunc(controllers.Login)).Methods("POST")
 	router.Handle("/auth/signup", http.HandlerFunc(controllers.Signup)).Methods("POST")
-	router.Handle("/home", http.HandlerFunc(controllers.Home)).Methods("GET")
 	router.Handle("/confirm", http.HandlerFunc(controllers.ConfirmEmail)).Methods("GET")
 	router.Handle("/auth/reset", http.HandlerFunc(controllers.ResetPassword)).Methods("PUT")
 
@@ -654,4 +657,20 @@ func getNumberOfPages(w http.ResponseWriter, r *http.Request) {
 	}).Info("Count number of pages")
 
 	json.NewEncoder(w).Encode(number)
+}
+
+func generateUsers() {
+	for i := 0; i < 40; i++ {
+		user := models.User{
+			Name:     faker.App().Name(),
+			Email:    faker.Internet().FreeEmail(),
+			Password: faker.Internet().Password(8, 14),
+			Address:  faker.Address().StreetAddress(),
+			Role:     "user",
+		}
+
+		models.DB.Create(&user)
+		fmt.Printf("User %d created: %s\n", i+1, user.Name)
+	}
+
 }

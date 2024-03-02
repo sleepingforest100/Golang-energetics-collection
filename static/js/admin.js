@@ -43,14 +43,13 @@ function fetchUserData() {
                 selectBox.addEventListener('change', function() {
                     const selectedRole = this.value;
                     const userId = item.ID;
-                    fetch('/your-server-endpoint', {
-                        method: 'POST',
+                    fetch(`http://localhost:8080/user-role/${userId}`, {
+                        method: 'PUT',
                         headers: {
                             'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            userId: userId,
                             role: selectedRole
                         })
                     })
@@ -91,8 +90,7 @@ function sendMailInit () {
             subject: mailHeader,
             body: mailBody
         };
-
-        fetch('#', {
+        fetch('http://localhost:8080/email', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -101,10 +99,13 @@ function sendMailInit () {
             body: JSON.stringify(mailData)
         })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to send mail');
+                if (response.ok) {
+                    alert('Mail sent successfully!');
+                    location.reload();
+                    console.log('Mail sent successfully!');
+                } else {
+                    console.error('Failed to send mails');
                 }
-                return response.json();
             })
             .then(data => {
                 console.log('Mail sent successfully:', data);
@@ -112,5 +113,7 @@ function sendMailInit () {
             .catch(error => {
                 console.error('Error sending mail:', error.message);
             });
+            alert('Mail sent successfully!');
+            location.reload();
     });
 }
