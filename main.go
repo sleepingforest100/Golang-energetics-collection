@@ -11,11 +11,15 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	_ "github.com/lib/pq"
-	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
 	"github.com/sirupsen/logrus"
 	"golang.org/x/time/rate"
+
+	"github.com/joho/godotenv"
+
+	"github.com/Golang-energetics-collection/controllers"
+	"github.com/Golang-energetics-collection/models"
 )
 
 type Message struct {
@@ -51,7 +55,6 @@ type CompositionUniqueConstraint struct {
 }
 
 var energeticsList []Energetic
-var db *gorm.DB
 
 var limit = 3
 
@@ -77,27 +80,32 @@ func initLog() {
 }
 
 func initDB() {
-	dsn := "host=localhost user=postgres password=222316pb dbname=energetix port=5432 sslmode=disable TimeZone=Asia/Shanghai"
-	var errConn error
-	db, errConn = gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	logrus.WithFields(logrus.Fields{
-		"module":           "main",
-		"function":         "initDB",
-		"action":           "db connection",
-		"connectionString": dsn,
-	}).Info("Attempt to connect to db")
-	if errConn != nil {
-		logrus.Fatal("Failed to connect to the db")
+
+	if err := godotenv.Load(); err != nil {
+		logrus.Print("No .env file found")
 	}
 
-	db.AutoMigrate(&Energetic{}, &Composition{})
+	config := models.Config{
+		Host:     os.Getenv("DB_HOST"),
+		Port:     os.Getenv("DB_PORT"),
+		User:     os.Getenv("DB_USER"),
+		Password: os.Getenv("DB_PASSWORD"),
+		DBName:   os.Getenv("DB_NAME"),
+	}
+
+	models.InitDB(config)
+
+	models.DB.AutoMigrate(&Energetic{}, &Composition{})
 	logrus.Info("Automigration for energetics and compositions")
 }
 
 func main() {
+	controllers.InitEmailAuth()
+
 	initLog()
 	initDB()
-	db.Preload("Composition").Find(&energeticsList)
+
+	models.DB.Preload("Composition").Find(&energeticsList)
 	logrus.Info("Preload energetics collection")
 
 	router := mux.NewRouter()
@@ -108,6 +116,12 @@ func main() {
 	router.Handle("/energetix/{id}", RateLimitMiddleware(http.HandlerFunc(updateEnergeticsById))).Methods("PUT")
 	router.Handle("/energetix/{id}", RateLimitMiddleware(http.HandlerFunc(deleteEnergeticById))).Methods("DELETE")
 	router.Handle("/pages", RateLimitMiddleware(http.HandlerFunc(getNumberOfPages))).Methods("GET")
+
+	router.Handle("/auth/login", http.HandlerFunc(controllers.Login)).Methods("POST")
+	router.Handle("/auth/signup", http.HandlerFunc(controllers.Signup)).Methods("POST")
+	router.Handle("/home", http.HandlerFunc(controllers.Home)).Methods("GET")
+	router.Handle("/confirm", http.HandlerFunc(controllers.ConfirmEmail)).Methods("GET")
+	// router.Handle("/auth/reset", http.HandlerFunc(controllers.ResetPassword)).Methods("POST")
 
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "index-go.html", http.StatusSeeOther)
@@ -141,8 +155,8 @@ func main() {
 
 func RateLimitMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Print("Limiter heeree")
-		fmt.Print(limiter)
+		// fmt.Print("Limiter heeree")
+		// fmt.Print(limiter)
 		if !limiter.Allow() {
 			message := Message{
 				Status:  "Request Failed",
@@ -159,7 +173,7 @@ func RateLimitMiddleware(next http.Handler) http.Handler {
 
 func getEnergetics(w http.ResponseWriter, r *http.Request) {
 
-	db.AutoMigrate(&Energetic{}, &Composition{})
+	models.DB.AutoMigrate(&Energetic{}, &Composition{})
 	logrus.Info("Automigration for energetics and compositions")
 
 	sort := r.FormValue("sort")
@@ -269,7 +283,7 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 
 	var totalCount int64
 
-	erro := db.
+	erro := models.DB.
 		Model(&Energetic{}).
 		Joins("Composition").
 		Order(sort+" "+order).
@@ -285,7 +299,7 @@ func getEnergetics(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := db.
+	err := models.DB.
 		Model(&Energetic{}).
 		Joins("Composition").
 		Limit(limit).
@@ -351,8 +365,8 @@ func getEnergeticsById(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 	var energetic1 Energetic
-	db.AutoMigrate(&Energetic{}, &Composition{})
-	err2 := db.Preload("Composition").First(&energetic1, params["id"]).Error
+	models.DB.AutoMigrate(&Energetic{}, &Composition{})
+	err2 := models.DB.Preload("Composition").First(&energetic1, params["id"]).Error
 
 	logrus.WithFields(logrus.Fields{
 		"function":      "getEnergeticsById",
@@ -411,10 +425,10 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 		"requestBody": r.Body,
 	}).Info("Correct fields for updating were accepted")
 
-	db.AutoMigrate(&Energetic{}, &Composition{})
+	models.DB.AutoMigrate(&Energetic{}, &Composition{})
 	var existingEnergetic Energetic
 
-	if err := db.Preload("Composition").First(&existingEnergetic, targetID).Error; err != nil {
+	if err := models.DB.Preload("Composition").First(&existingEnergetic, targetID).Error; err != nil {
 		answer := Message{Status: "404", Message: "Energy drink with such ID does not exist"}
 		json.NewEncoder(w).Encode(answer)
 		logrus.WithFields(logrus.Fields{
@@ -435,7 +449,7 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 	existingEnergetic.Composition.Caffeine = updatedEnergetic.Composition.Caffeine
 	existingEnergetic.Composition.Taurine = updatedEnergetic.Composition.Taurine
 
-	db.Session(&gorm.Session{FullSaveAssociations: true}).Save(&existingEnergetic)
+	models.DB.Session(&gorm.Session{FullSaveAssociations: true}).Save(&existingEnergetic)
 
 	logrus.WithFields(logrus.Fields{
 		"function": "updateEnergeticsById",
@@ -477,9 +491,9 @@ func postEnergetic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	db.AutoMigrate(&Energetic{}, &Composition{})
+	models.DB.AutoMigrate(&Energetic{}, &Composition{})
 
-	if err := db.Create(&newEnergetic).Error; err != nil {
+	if err := models.DB.Create(&newEnergetic).Error; err != nil {
 		answer := Message{Status: "404", Message: "Invalid JSON message"}
 		json.NewEncoder(w).Encode(answer)
 		logrus.WithFields(logrus.Fields{
@@ -494,7 +508,7 @@ func postEnergetic(w http.ResponseWriter, r *http.Request) {
 		"action":   "creating new energetic",
 	}).Info("Sucessful create of energetic")
 
-	db.Preload("Composition").Find(&energeticsList)
+	models.DB.Preload("Composition").Find(&energeticsList)
 	logrus.Info("Updating energetics List by preloading and find")
 
 	w.WriteHeader(http.StatusCreated)
@@ -522,7 +536,7 @@ func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
 		logrus.Error("Error with parsing id to int")
 		return
 	}
-	db.AutoMigrate(&Energetic{}, &Composition{})
+	models.DB.AutoMigrate(&Energetic{}, &Composition{})
 
 	logrus.WithFields(logrus.Fields{
 		"function":      "deleteEnergeticById",
@@ -530,13 +544,13 @@ func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
 		"energetics_id": targetID,
 	}).Info("Deleting energetic by ID")
 
-	if err := db.Delete(&Energetic{}, targetID).Error; err != nil {
+	if err := models.DB.Delete(&Energetic{}, targetID).Error; err != nil {
 		answer := Message{Status: "404", Message: "Invalid id"}
 		json.NewEncoder(w).Encode(answer)
 		logrus.Error("Deleting unexisting energetic")
 		return
 	}
-	db.Preload("Composition").Find(&energeticsList)
+	models.DB.Preload("Composition").Find(&energeticsList)
 
 	answer := Message{Status: "410", Message: "Energy drink was deleted successfully"}
 	logrus.Info("Energetic was deleted")
@@ -546,7 +560,7 @@ func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
 
 func getNumberOfPages(w http.ResponseWriter, r *http.Request) {
 
-	db.Find(&energeticsList)
+	models.DB.Find(&energeticsList)
 	count := int(math.Ceil(float64(len(energeticsList)) / float64(limit)))
 	number := pagesCount{Pages: count}
 
