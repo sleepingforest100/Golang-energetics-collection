@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -20,6 +21,7 @@ import (
 
 	"github.com/Golang-energetics-collection/controllers"
 	"github.com/Golang-energetics-collection/models"
+	"github.com/Golang-energetics-collection/utils"
 )
 
 type Message struct {
@@ -389,6 +391,29 @@ func getEnergeticsById(w http.ResponseWriter, r *http.Request) {
 }
 
 func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
+	//check token
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		answer := Message{Status: "400", Message: "No Authorization header provided"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+	claims, err := utils.ParseToken(token)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		answer := Message{Status: "401", Message: "unauthorized"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+	if claims.Role != "admin" {
+		w.WriteHeader(http.StatusUnauthorized)
+		answer := Message{Status: "401", Message: "not allowed"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+	//other logic
 
 	logrus.WithFields(logrus.Fields{
 		"function": "updateEnergeticsById",
@@ -478,6 +503,29 @@ func updateEnergeticsById(w http.ResponseWriter, r *http.Request) {
 }
 
 func postEnergetic(w http.ResponseWriter, r *http.Request) {
+	//check token
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		answer := Message{Status: "400", Message: "No Authorization header provided"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+	claims, err := utils.ParseToken(token)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		answer := Message{Status: "401", Message: "unauthorized"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+	if claims.Role != "admin" {
+		w.WriteHeader(http.StatusUnauthorized)
+		answer := Message{Status: "401", Message: "not allowed"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+	/// other logic
 
 	var newEnergetic Energetic
 
@@ -520,6 +568,29 @@ func postEnergetic(w http.ResponseWriter, r *http.Request) {
 }
 
 func deleteEnergeticById(w http.ResponseWriter, r *http.Request) {
+	//check token
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		answer := Message{Status: "400", Message: "No Authorization header provided"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+	claims, err := utils.ParseToken(token)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		answer := Message{Status: "401", Message: "unauthorized"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+	if claims.Role != "admin" {
+		w.WriteHeader(http.StatusUnauthorized)
+		answer := Message{Status: "401", Message: "not allowed"}
+		json.NewEncoder(w).Encode(answer)
+		return
+	}
+	//other logic
 
 	logrus.WithFields(logrus.Fields{
 		"function": "deleteEnergeticById",
