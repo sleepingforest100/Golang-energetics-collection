@@ -1,13 +1,27 @@
 document.addEventListener('DOMContentLoaded', function () {
     if (auth('admin')) {
         fetchUserData();
+        sendMailInit();
     } else {
         window.location.href = '../index-go.html';
     }
 });
 
 function fetchUserData() {
-    fetch('your-api-endpoint')
+    const token = getCookie('jwtToken');
+    if (!token) {
+        console.error('Token not found.');
+        return;
+    }
+    const requestOptions = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+        }
+    };
+
+    fetch('http://localhost:8080/users', requestOptions)
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById('tableBody');
@@ -32,6 +46,7 @@ function fetchUserData() {
                     fetch('/your-server-endpoint', {
                         method: 'POST',
                         headers: {
+                            'Authorization': `Bearer ${token}`,
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
@@ -55,4 +70,47 @@ function fetchUserData() {
             });
         })
         .catch(error => console.error('Error fetching data:', error));
+}
+
+function sendMailInit () {
+    const token = getCookie('jwtToken');
+    if (!token) {
+        console.error('Token not found.');
+        return;
+    }
+
+    const form = document.getElementById('mailForm');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const mailHeader = document.getElementById('mailHeader').value;
+        const mailBody = document.getElementById('mailBody').value;
+
+        const mailData = {
+            mailHeader: mailHeader,
+            mailBody: mailBody
+        };
+
+        fetch('#', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(mailData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to send mail');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Mail sent successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error sending mail:', error.message);
+            });
+    });
 }

@@ -96,9 +96,17 @@ $(document).ready(function() {
 
 
     function deleteEntry(id) {
+        const token = getCookie('jwtToken');
+        if (!token) {
+            console.error('Token not found.');
+            return;
+        }
         if (confirm('Are you sure you want to delete this entry?')) {
             fetch(`http://localhost:8080/energetix/${id}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
             })
                 .then(response => {
                     if (response.ok) {
