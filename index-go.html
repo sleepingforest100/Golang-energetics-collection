@@ -12,10 +12,88 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="icon" href="/static/img/favicon.png">
   <script src="/static/js/tiler.js"></script>
+  <script src="/static/js/registration.js"></script>
+  <script src="/static/js/navbar.js"></script>
 </head>
 <body>
 <div id="modalbox" class="position-absolute">
-
+  <!-- CHECK -->
+    <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="signupModalLabel">Create a new account</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body bg-dark-subtle text-start">
+            <form id="signupForm">
+              <div class="form-group">
+                <label for="regname">Username: </label>
+                <input type="text" class="form-control" id="regname" required>
+              </div>
+              <div class="form-group">
+                <label for="email">Email: </label>
+                <input type="text" class="form-control" id="email" required>
+              </div>
+              <div class="form-group">
+                <label for="address">Address: </label>
+                <input type="text" class="form-control" id="address" required>
+              </div>
+              <div class="form-group">
+                <label for="regpass">Password:</label>
+                <input type="password" class="form-control" id="regpass" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="emailConfirmModal" tabindex="-1" aria-labelledby="emailConfirmModalLabel">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="emailConfirmModalLabel">Confirm email</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body bg-dark-subtle text-start">
+          <p>A confirmation link have been sent to your email. Check your messages to finish your registration.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="modal fade" id="signinModal" tabindex="-1" aria-labelledby="signinModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="signinModalLabel">Log into your account</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body bg-dark-subtle text-start">
+            <form id="signinForm">
+              <div class="form-group">
+                <label for="logname">Username: </label>
+                <input type="text" class="form-control" id="logname" required>
+              </div>
+              <div class="form-group">
+                <label for="logpass">Password:</label>
+                <input type="password" class="form-control" id="logpass" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>
 <div class="wrapper">
   <header class="parallax">
@@ -36,22 +114,29 @@
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <div class="navbar-nav">
           <a href="index-go.html" class="nav-item nav-link active">Home</a>
+          <a href="profile-go.html" class="nav-item nav-link" id="nav-profile">Profile</a>
+          <a href="admin-go.html" class="nav-item nav-link" id="nav-admin">Admin Panel</a>
           <div class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Moderation</a>
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Search</a>
             <div class="dropdown-menu disabled">
-              <a href="form-go.html" class="dropdown-item">Create new entry</a>
               <form>
-                <input type="number" class="dropdown-item form-control w-75 mx-1" placeholder="Search by ID" id="search" required>
+                <input type="number" class="dropdown-item form-control mx-1 border-3 border border-warning-subtle" placeholder="Search by ID" style="width:90%" id="search" required>
               </form>
             </div>
           </div>
         </div>
-        <div class="navbar-nav ms-auto">
-          <a href="#" class="nav-item nav-link">Login</a>
+        <div class="navbar-nav nav-item dropdown ms-auto">
+          <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="nav-login">Log in</a>
+          <div class="dropdown-menu dropdown-menu-end disabled">
+            <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</a>
+            <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#signinModal">Sign in</a>
+          </div>
+          <a href="#" class="nav-link" id="nav-logout">Logout</a>
         </div>
       </div>
     </div>
   </nav>
+
 
   <div class="bg-white">
   <div class="container mt-4">

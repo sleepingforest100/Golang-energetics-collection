@@ -13,10 +13,17 @@ function createCarouselItem(item) {
     var cardText = $('<div class="card-text"></div>').html(
         item.Description + '<br><em class="text-warning">' +
         'CAF:' + item.Composition.Caffeine + '/TAU:' + item.Composition.Taurine + '</em>');
-    var cardFooter = $('<div class="card-footer"></div>').append(
-        '<button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#modal_'+item.EnergeticsID+'">Info</button>' +
-        '<a href="form-go.html?id='+item.EnergeticsID+'" class="btn btn-secondary rounded-pill">Update</a>' +
-        '<button class="btn btn-secondary rounded-pill deletebtn" data-target='+item.EnergeticsID+'>Delete</button>');
+
+    var cardFooter = $('<div class="card-footer"></div>');
+    var infoButton = $('<button type="button" class="btn btn-primary rounded-pill" data-bs-toggle="modal" data-bs-target="#modal_' + item.EnergeticsID + '">Info</button>');
+    cardFooter.append(infoButton);
+    if (auth('admin')) {
+        var updateButton = $('<a href="form-go.html?id=' + item.EnergeticsID + '" class="btn btn-secondary rounded-pill">Update</a>');
+        cardFooter.append(updateButton);
+        var deleteButton = $('<button class="btn btn-secondary rounded-pill deletebtn" data-target=' + item.EnergeticsID + '>Delete</button>');
+        cardFooter.append(deleteButton);
+    }
+
     var toImg = $('<a class="carousel-control-prev w-100 h-75 pb-25" href="#tile_'+item.EnergeticsID+'" data-bs-slide="prev" data-bs-slide-to="0"></a>');
     card.append(cardHeader, cardText, cardFooter, toImg);
 

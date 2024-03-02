@@ -103,17 +103,17 @@ article:hover{
 /*    list-style-image: url(../img/ul_icon.png);*/
 /*    font-family: "Segoe UI Light",monospace;*/
 /*}*/
-th,td{
-    text-align: center;
-    font-family: "Segoe UI Light",monospace;
-    font-size:larger;
-}
-table{
-    margin: 35px auto 20px;
-    font-size: 1.75vw;
-    width:50px;
-    min-width: 50px;
-}
+/*th,td{*/
+/*    text-align: center;*/
+/*    font-family: "Segoe UI Light",monospace;*/
+/*    font-size:larger;*/
+/*}*/
+/*table{*/
+/*    margin: 35px auto 20px;*/
+/*    font-size: 1.75vw;*/
+/*    width:50px;*/
+/*    min-width: 50px;*/
+/*}*/
 .form{
     color:white;
     width: 100%;
@@ -541,4 +541,31 @@ form{
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+#profile-info{
+    background-color: peachpuff;
+    border: transparent;
+    border-radius: 10px;
+}
+
+/* some table style are already applied -> revise*/
+
+.scrollable-table {
+    padding: 30px;
+    background-color: peachpuff;
+    margin: 50px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+tr{
+    border-bottom: solid black 2px;
+}
+td, th{
+    border-right: solid black 2px;
+    border-left: solid black 2px;
 }
