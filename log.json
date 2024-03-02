@@ -4234,3 +4234,31 @@
 {"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-02T17:37:16+06:00"}
 {"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-02T17:37:16+06:00"}
 {"level":"info","msg":"Preload energetics collection","time":"2024-03-02T17:37:16+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-02T17:55:47+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-02T17:55:48+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-02T17:55:48+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-02T17:55:49+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-02T17:55:49+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-02T17:55:49+06:00"}
+{"action":"servers starts","function":"main","level":"info","module":"main","msg":"Server launches","port":"8080","time":"2024-03-02T17:55:49+06:00"}
+{"level":"panic","msg":"Server did not run","time":"2024-03-02T17:55:49+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-02T18:02:27+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-02T18:02:28+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-02T18:02:28+06:00"}
+{"action":"servers starts","function":"main","level":"info","module":"main","msg":"Server launches","port":"8080","time":"2024-03-02T18:02:28+06:00"}
+{"level":"panic","msg":"Server did not run","time":"2024-03-02T18:02:28+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-02T18:02:48+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-02T18:02:48+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-02T18:02:48+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-02T18:06:04+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-02T18:06:05+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-02T18:06:05+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-02T18:06:45+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-02T18:06:45+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-02T18:06:45+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-02T18:20:46+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-02T18:20:46+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-02T18:20:46+06:00"}
+{"action":"log file opening","function":"initLog","level":"info","logFile":"log.json","logrusFormatter":"JSONformatter","module":"main","msg":"Log file was opened","time":"2024-03-02T18:25:47+06:00"}
+{"level":"info","msg":"Automigration for energetics and compositions","time":"2024-03-02T18:25:47+06:00"}
+{"level":"info","msg":"Preload energetics collection","time":"2024-03-02T18:25:47+06:00"}

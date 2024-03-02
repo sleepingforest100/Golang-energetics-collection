@@ -242,16 +242,9 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if claims.Email != user.Email {
-		w.WriteHeader(http.StatusUnauthorized)
-		answer := Message{Status: "401", Message: "unauthorized"}
-		json.NewEncoder(w).Encode(answer)
-		return
-	}
-
 	var existingUser models.User
 
-	models.DB.Where("email = ?", user.Email).First(&existingUser)
+	models.DB.Where("email = ?", claims.Email).First(&existingUser)
 
 	if existingUser.ID == 0 {
 		w.WriteHeader(http.StatusBadRequest)
