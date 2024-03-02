@@ -39,11 +39,11 @@ $(document).ready(function () {
 
     $('#signinForm').submit(function (event) {
         event.preventDefault();
-        var username = $('#regname').val();
-        var password = $('#regpass').val();
+        var email = $('#logmail').val();
+        var password = $('#logpass').val();
 
         var formData = {
-            username: username,
+            email: email,
             password: password,
         }
 

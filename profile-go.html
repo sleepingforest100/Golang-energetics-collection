@@ -4,13 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Energetix</title>
-  <link rel="stylesheet" href="/static/css/custom.css">
   <link rel="stylesheet" href="/static/css/bootstrap.min.css">
   <script src="/static/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="icon" href="/static/img/favicon.png">
+  <script src="/static/js/cookieHandler.js"></script>
   <script src="/static/js/profile.js"></script>
+  <link rel="stylesheet" href="/static/css/custom.css">
 </head>
 <body>
 <div class="position-absolute">
@@ -85,11 +86,23 @@
           <a href="index-go.html" class="nav-item nav-link active">Home</a>
         </div>
         <div class="navbar-nav ms-auto">
-          <a href="#" class="nav-item nav-link">Logout</a>
+          <a href="#" class="nav-item nav-link" id="nav-logout">Logout</a>
         </div>
       </div>
     </div>
   </nav>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const logoutLink = document.getElementById('nav-logout');
+      logoutLink.addEventListener('click', function(event) {
+        event.preventDefault();
+        document.cookie = 'jwtToken=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;';
+        window.location.reload();
+      });
+    });
+  </script>
+
+
 
   <div id="profile-info" class="my-5 p-3 mx-5">
 

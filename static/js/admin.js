@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (auth('admin')) {
         fetchUserData();
     } else {
-        window.location.href = './index-go.html';
+        window.location.href = '../index-go.html';
     }
 });
 
