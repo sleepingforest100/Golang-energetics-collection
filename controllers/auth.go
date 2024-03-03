@@ -317,7 +317,7 @@ func generateConfirmationToken() string {
 
 func sendConfirmationToken(token string, email string) {
 
-	body := "Click the following link to confirm your email: http://localhost:8080/confirm?token=" + token + "&email=" + email
+	body := "Click the following link to confirm your email: https://energetix-collection.onrender.com/confirm?token=" + token + "&email=" + email
 
 	msg := []byte("To: " + email + "\r\n" +
 		"Subject: Confirm your email \r\n" +
