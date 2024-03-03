@@ -102,7 +102,7 @@
         var id = getQueryParam('id');
         if (id) {
           var obj;
-          fetch(`http://localhost:8080/energetix/${id}`)
+          fetch(`/energetix/${id}`)
                   .then(response => response.json())
                   .then(data => {
                     obj = data;
@@ -135,7 +135,7 @@
       }
 
       var id = getQueryParam('id');
-      var url = id ? `http://localhost:8080/energetix/${id}` : 'http://localhost:8080/energetix';
+      var url = id ? `/energetix/${id}` : '/energetix';
 
       const name = $('#title').val();
       const taste = $('#taste').val();

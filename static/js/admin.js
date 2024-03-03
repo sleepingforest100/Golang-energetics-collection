@@ -21,7 +21,7 @@ function fetchUserData() {
         }
     };
 
-    fetch('http://localhost:8080/users', requestOptions)
+    fetch('/users', requestOptions)
         .then(response => response.json())
         .then(data => {
             const tableBody = document.getElementById('tableBody');
@@ -43,7 +43,7 @@ function fetchUserData() {
                 selectBox.addEventListener('change', function() {
                     const selectedRole = this.value;
                     const userId = item.ID;
-                    fetch(`http://localhost:8080/user-role/${userId}`, {
+                    fetch(`/user-role/${userId}`, {
                         method: 'PUT',
                         headers: {
                             'Authorization': `Bearer ${token}`,
@@ -90,7 +90,7 @@ function sendMailInit () {
             subject: mailHeader,
             body: mailBody
         };
-        fetch('http://localhost:8080/email', {
+        fetch('/email', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

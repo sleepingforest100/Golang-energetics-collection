@@ -14,7 +14,7 @@ $(document).ready(function () {
             email: email
         };
     
-        fetch('http://localhost:8080/auth/signup', {
+        fetch('/auth/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ $(document).ready(function () {
             password: password,
         };
     
-        fetch('http://localhost:8080/auth/login', {
+        fetch('/auth/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

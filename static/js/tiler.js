@@ -3,7 +3,7 @@ $(document).ready(function() {
 
     ];
     var itemsPerRow = 6;
-    var url = "http://localhost:8080/energetix";
+    var url = "/energetix";
     var currentPage = 1;
     var totalPages = null;
     function fetchData(url) {
@@ -22,7 +22,7 @@ $(document).ready(function() {
             .catch(error => console.error('Fetching error:', error));
     }
     function fetchTotal(){
-        fetch('http://localhost:8080/pages', {
+        fetch('/pages', {
             credentials: 'include',
         })
             .then(response => response.json())
@@ -102,7 +102,7 @@ $(document).ready(function() {
             return;
         }
         if (confirm('Are you sure you want to delete this entry?')) {
-            fetch(`http://localhost:8080/energetix/${id}`, {
+            fetch(`/energetix/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

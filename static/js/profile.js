@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     'Content-Type': 'application/json'
                 }
             };
-            fetch('http://localhost:8080/user', requestOptions)
+            fetch('/user', requestOptions)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch user data');
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
 
-            fetch('http://localhost:8080/user', {
+            fetch('/user', {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 password: document.getElementById('newpass').value
             };
 
-            fetch('http://localhost:8080/auth/reset', {
+            fetch('/auth/reset', {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,

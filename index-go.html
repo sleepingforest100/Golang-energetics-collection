@@ -86,7 +86,7 @@
                 <label for="logpass">Password:</label>
                 <input type="password" class="form-control" id="logpass" required>
               </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="btn btn-primary" id="logbtn">Submit</button>
             </form>
           </div>
           <div class="modal-footer">
@@ -129,8 +129,8 @@
         <div class="navbar-nav nav-item dropdown ms-auto">
           <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" id="nav-login">Log in</a>
           <div class="dropdown-menu dropdown-menu-end disabled">
-            <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#signupModal">Sign up</a>
-            <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#signinModal">Sign in</a>
+            <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#signupModal" id="nav-signup">Sign up</a>
+            <a href="#" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#signinModal" id="nav-signin">Sign in</a>
           </div>
           <a href="#" class="nav-link" id="nav-logout">Logout</a>
         </div>
@@ -229,7 +229,7 @@
     function search(){
       var id = $('#search').val();
       var item;
-      fetch(`http://localhost:8080/energetix/${id}`)
+      fetch(`/energetix/${id}`)
               .then(response => response.json())
               .then(data => {
                 item = data;

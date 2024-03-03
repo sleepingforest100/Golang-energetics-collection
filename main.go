@@ -134,6 +134,8 @@ func main() {
 	router.Handle("/user-role/{id}", http.HandlerFunc(controllers.ChangeRole)).Methods("PUT")
 	router.Handle("/email", http.HandlerFunc(controllers.SendEmail)).Methods("POST")
 
+	router.Handle("/newusers", http.HandlerFunc(GetNewUsers)).Methods("GET")
+
 	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "index-go.html", http.StatusSeeOther)
 	})
@@ -659,8 +661,9 @@ func getNumberOfPages(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(number)
 }
 
-func generateUsers() {
-	for i := 0; i < 40; i++ {
+func GenerateUsers() []models.User {
+	var users []models.User
+	for i := 0; i < 100; i++ {
 		user := models.User{
 			Name:     faker.App().Name(),
 			Email:    faker.Internet().FreeEmail(),
@@ -668,9 +671,21 @@ func generateUsers() {
 			Address:  faker.Address().StreetAddress(),
 			Role:     "user",
 		}
-
-		models.DB.Create(&user)
+		// models.DB.Create(&user)
 		fmt.Printf("User %d created: %s\n", i+1, user.Name)
+		users = append(users, user)
 	}
 
+	return users
+}
+
+func GetNewUsers(w http.ResponseWriter, r *http.Request) {
+	var users []models.User = GenerateUsers()
+	usersJSON, err := json.Marshal(users)
+	if err != nil {
+		http.Error(w, "Error converting users to JSON", http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(usersJSON)
 }
