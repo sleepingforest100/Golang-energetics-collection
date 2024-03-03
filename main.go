@@ -109,7 +109,7 @@ func main() {
 	initLog()
 	initDB()
 
-	// generateUsers()
+	// GenerateUsers()
 
 	models.DB.Preload("Composition").Find(&energeticsList)
 	logrus.Info("Preload energetics collection")
