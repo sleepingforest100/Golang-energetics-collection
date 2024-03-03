@@ -3,7 +3,7 @@ $(document).ready(function() {
 
     ];
     var itemsPerRow = 6;
-    var url = "/energetix";
+    var url = "http://localhost:8080/energetix";
     var currentPage = 1;
     var totalPages = null;
     function fetchData(url) {
